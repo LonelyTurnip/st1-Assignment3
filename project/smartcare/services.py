@@ -42,6 +42,8 @@ class PatientService:
             raise LookupError("Absence of PatientID value")
         if patient == None or not isinstance(patient, Patient):
             raise ValueError("Patient_ID is blank/invalid")
+
+        return patient
     
         raise NotImplementedError('Stage 6: patient lookup')
 

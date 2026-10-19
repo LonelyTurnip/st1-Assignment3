@@ -71,6 +71,7 @@ class PractitionerService:
         practitioner. The starter deliberately raises
         NotImplementedError.
         """
+        
         if not practitioner_id or not isinstance(practitioner_id, str):
             raise ValueError('Practitioner ID cannot be blank or invalid')
         practitioner = self.data_store.find_practitioner(practitioner_id)

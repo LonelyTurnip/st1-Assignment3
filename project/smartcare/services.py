@@ -79,7 +79,13 @@ class PractitionerService:
         practitioner. The starter deliberately raises
         NotImplementedError.
         """
-        raise NotImplementedError('Stage 6: practitioner lookup')
+        
+        if not practitioner_id or not isinstance(practitioner_id, str):
+            raise ValueError('Practitioner ID cannot be blank or invalid')
+        practitioner = self.data_store.find_practitioner(practitioner_id)
+        if practitioner is None:
+            raise LookupError('Practitioner not found')
+        return practitioner
 
 
 class AppointmentService:

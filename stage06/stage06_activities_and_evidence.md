@@ -2,11 +2,13 @@
 
 Complete this one group record. Link actual issues, diffs, tests and reviews; avoid copying entire histories. Blank fields are intentional. Duplicate rows as needed. Use synthetic data only. Every member records their own meaningful contribution. Do not invent results, reviews or Copilot use.
 
-- Group/tutorial: [response]
-- Members, GitHub usernames and cohorts: [response]
-- Repository URL: [response]
-- Starting SHA: [response]
-
+- Group/tutorial: Mon 2:30 - 4:30 Group 4
+- Members, GitHub usernames and cohorts:
+    Aidan - LonelyTurnip - UG
+    Alexandria - - UG
+    Archie - Arch2ey - UG
+- Repository URL: https://github.com/LonelyTurnip/st1-Assignment3
+- Starting SHA: a6672ff
 ## A Requirement to issue activities
 
 ### FR-02 Patient Search

@@ -38,15 +38,11 @@ class PatientService:
 
         patient = self.data_store.find_patient(patient_id)
 
-        if not patient_id:
-            raise LookupError("Absence of PatientID value")
-        if patient == None or not isinstance(patient, Patient):
-            raise ValueError("Patient_ID is blank/invalid")
-
+        if not patient_id or not isinstance(patient_id, str):
+            raise ValueError('Patient ID cannot be blank or invalid')
+        if patient is None:
+            raise LookupError('Patient not found')
         return patient
-    
-        raise NotImplementedError('Stage 6: patient lookup')
-
 
 class PractitionerService:
     """Coordinate practitioner registration and lookup through the shared
@@ -155,7 +151,14 @@ class AppointmentService:
         Return the cancelled object. Unknown IDs raise LookupError;
         invalid transitions raise ValueError and leave state unchanged.
         """
-        raise NotImplementedError('Stage 6: appointment cancellation')
+
+        if not appointment_id or not isinstance(appointment_id, str):
+            raise ValueError('Appointment ID cannot be blank or invalid')
+        appointment = self.data_store.find_appointment(appointment_id)
+        if appointment is None:
+            raise LookupError('Appointment not found')
+        appointment.cancel()
+        return appointment
 
     def list_practitioner_appointments(
         self,

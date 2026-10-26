@@ -5,7 +5,7 @@ Complete this one group record. Link actual issues, diffs, tests and reviews; av
 - Group/tutorial: Mon 2:30 - 4:30 Group 4
 - Members, GitHub usernames and cohorts:
     Aidan - LonelyTurnip - UG
-    Alexandria - - UG
+    Alexandria - xereinera - UG
     Archie - Arch2ey - UG
 - Repository URL: https://github.com/LonelyTurnip/st1-Assignment3
 - Starting SHA: a6672ff

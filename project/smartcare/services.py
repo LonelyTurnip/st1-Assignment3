@@ -36,10 +36,9 @@ class PatientService:
         The starter deliberately raises NotImplementedError.
         """
 
-        patient = self.data_store.find_patient(patient_id)
-
         if not patient_id or not isinstance(patient_id, str):
             raise ValueError('Patient ID cannot be blank or invalid')
+        patient = self.data_store.find_patient(patient_id)
         if patient is None:
             raise LookupError('Patient not found')
         return patient

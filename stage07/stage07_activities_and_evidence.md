@@ -1,6 +1,11 @@
 # Stage 7 Testing and Verification Record
 
-Group/tutorial: [complete]  Members/cohorts: [complete]
+Group/tutorial: Mon 2:30 - 4:30 Group 4 
+Members/cohorts: 
+    Aidan - LonelyTurnip - UG
+    Alexandria - xereinera - UG
+    Archie - Arch2ey - UG
+    
 Requirements baseline: SmartCare A3 Requirements Baseline 2026, revision 2.
 Use the same project/. Link actual evidence; keep responses concise. Blank fields are for your group. Copy rows only as needed.
 

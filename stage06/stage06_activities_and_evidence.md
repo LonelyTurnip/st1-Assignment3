@@ -13,9 +13,9 @@ Complete this one group record. Link actual issues, diffs, tests and reviews; av
 
 ### FR-02 Patient Search
 
-- Title: [response]
-- Context: [response]
-- Requirement: [response]
+- Title: [Feature - Patient Search]
+- Context: [User looks up a patient using thier ID.]
+- Requirement: [If the user exists then their information will be returned. If the patient does not exist or the ID is invalid then an error message will return.]
 - Acceptance criteria: [response]
 - Scope: [response]
 - Definition of Done: [response]
@@ -24,9 +24,9 @@ Complete this one group record. Link actual issues, diffs, tests and reviews; av
 
 ### FR-06 Appointment Cancellation with FR-07 retained history
 
-- Title: [response]
-- Context: [response]
-- Requirement: [response]
+- Title: [Feature - Appointment Cancellation]
+- Context: [User cancels a booked appointment]
+- Requirement: [When the user cancels an appointment, if the appointment exists and is booked then the cancel will get canceled. If the appointment does not exist or is invalid then an error message will be returned.]
 - Acceptance criteria: [response]
 - Scope: [response]
 - Definition of Done: [response]
@@ -37,11 +37,11 @@ Complete this one group record. Link actual issues, diffs, tests and reviews; av
 
 | Original example | Strong or Weak | Reason |
 |---|---|---|
-| changes | [select] | [response] |
-| final version | [select] | [response] |
-| Add patient search by ID | [select] | [response] |
-| fix stuff | [select] | [response] |
-| Prevent cancellation of completed appointments | [select] | [response] |
+| changes | [Weak] | [Provides no context for what has been changed in the commit] |
+| final version | [Weak] | [Does not explain why this is the final version. Code is also constantly being changes so stating this is the final version is a bad practice.] |
+| Add patient search by ID | [Strong] | [Explains what has been added in the commit] |
+| fix stuff | [Weak] | [Provides no context on what has been fixed] |
+| Prevent cancellation of completed appointments | [Weak] | [Does not explain what has been done to the feature] |
 
 ## C Over scoped PR review
 
@@ -146,37 +146,37 @@ Repeat per member. Include only categories that describe actual work; write not 
 
 Why is a high commit count not necessarily evidence of strong contribution?
 
-[response]
+[A high commit count does not neccissarily show evidence of strong contribtuion. This is because the contents of the commits could be very minimal and only working on a small aspect of the project. An example could be a bunch of small commits changing spelling errors or formatting for one feature. In this scenario, lots of commits have been made but only one feature has been completed.]
 
 ## L Stage 6 formative questions
 
 1. What is version control?
 
-[response]
+[Version control is a practice to help maintain and manage versions and changes of files]
 
 2. Why is a feature branch useful?
 
-[response]
+[A feature branch is useful because it provides a safe way to test and build code without permanenetly changing the main source code files. This practice ensures that only changes that have passed testing are placed in the main branch.]
 
 3. What makes a commit a good engineering commit?
 
-[response]
+[A good engineering commit is a concise statement that focuses on one element that has been changed. Good commits will only focus on one implemented feature and provide information on what has been done. Good commits are useful to help in debugging.]
 
 4. What is a pull request?
 
-[response]
+[A pull request is a way for developers to submit code for it to be reviewed prior to being merged into the main branch.]
 
 5. What is the purpose of code review?
 
-[response]
+[The purpose of code review is to make sure that it meets specifications and functions properly in the program. It is also so another developer is able to look at the code.]
 
 6. What does a Git diff show?
 
-[response]
+[Git diff will show the difference between states in repositotries. This means that it will show what lines have been modified.]
 
 7. What is a Definition of Done?
 
-[response]
+[A Definition of Done is an agreed upon description that outlines what is required in a feature for it meet the requirements of the project.]
 
 8. What is the appropriate role of GitHub Copilot in pull-request review?
 
@@ -184,7 +184,7 @@ Why is a high commit count not necessarily evidence of strong contribution?
 
 9. Why should individual contribution not be judged only by commit count?
 
-[response]
+[Individual contribution should not be judged only by commit count. This is because ]
 
 10. What is the Stage 6 engineering rule?
 
@@ -192,8 +192,8 @@ Why is a high commit count not necessarily evidence of strong contribution?
 
 ## M Completion and handover
 
-- Starting SHA: [response]
-- Final Stage 6 code SHA: [response]
+- Starting SHA: [a6672ff]
+- Final Stage 6 code SHA: [f810488]
 - Test command: [response]
 - Working directory: [response]
 - Observed result: [response]

@@ -29,10 +29,10 @@ For each requirement, propose one positive test, one negative test and the key a
 For each, select Strong for stated behaviour or Weak/unclear and explain why. State the behaviour and limits.
 
 `assert True`
-Judgement: [Strong for stated behaviour / Weak/unclear]  Why: [response]
+Judgement: [Unclear]  Why: [Assert True is unclear on what is assumed to be true.]
 
 `assert appointment is not None`
-Judgement: [Strong for stated behaviour / Weak/unclear]  Why: [response]
+Judgement: [Strong]  Why: [Assert appointment is not none is strong as it states what element it is asserting and clearly stating what it thinks it should be.]
 
 `assert appointment.status == AppointmentStatus.CANCELLED`
 Judgement: [Strong for stated behaviour / Weak/unclear]  Why: [response]
@@ -203,7 +203,7 @@ Record actual work in test design, implementation, review, traceability, diagnos
 [Code coverage tells us the percentage of functions that are executed when running tests. Code coverage does not prove that all those functions are providing the expected outcome.]
 
 8. What makes an assertion weak?
-[response]
+[An assertion is weak when it is unclear what is being asserted.]
 
 9. What is the appropriate role of GitHub Copilot as a test assistant?
 [response]

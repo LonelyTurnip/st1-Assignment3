@@ -16,7 +16,7 @@ Complete this one group record. Link actual issues, diffs, tests and reviews; av
 - Title: [Feature - Patient Search]
 - Context: [User looks up a patient using thier ID.]
 - Requirement: [If the user exists then their information will be returned. If the patient does not exist or the ID is invalid then an error message will return.]
-- Acceptance criteria: [response]
+- Acceptance criteria: [Patient can be search by the ID. If a valid ID is given then the patient will be returned. If the ID is invalid or no patient exists then an error message will be returned.]
 - Scope: [response]
 - Definition of Done: [response]
 - Owner: [response]
@@ -27,7 +27,7 @@ Complete this one group record. Link actual issues, diffs, tests and reviews; av
 - Title: [Feature - Appointment Cancellation]
 - Context: [User cancels a booked appointment]
 - Requirement: [When the user cancels an appointment, if the appointment exists and is booked then the cancel will get canceled. If the appointment does not exist or is invalid then an error message will be returned.]
-- Acceptance criteria: [response]
+- Acceptance criteria: [If the user attempts to cancel a valid appointment then the appointment will be modified to be cancelled. If the user tries to cancel an appointment that has already been cancelled or does not exist then an error message will return.]
 - Scope: [response]
 - Definition of Done: [response]
 - Owner: [response]
@@ -56,24 +56,24 @@ A cancellation PR also renames unrelated patient fields, restructures unrelated 
 
 GitHub Copilot says: "Looks good; tests pass."
 
-- Missing evidence: [response]
-- Follow-up review question 1: [response]
-- Follow-up review question 2: [response]
-- Follow-up review question 3: [response]
-- Follow-up review question 4: [response]
-- Follow-up review question 5: [response]
+- Missing evidence: [What tests passed. What the results of the tests were.]
+- Follow-up review question 1: [What parts of the code did you test?]
+- Follow-up review question 2: [What parts of the code did you not test?]
+- Follow-up review question 3: [What were the results of the tests?]
+- Follow-up review question 4: [What was the input and output of the tests?]
+- Follow-up review question 5: [Did the tests return the expected output?]
 - Additional questions if useful: [response]
 
 ## E Team workflow agreement
 
 | Practice | Team agreement |
 |---|---|
-| Branch naming | [response] |
-| Commit message convention | [response] |
-| PR size | [response] |
-| Another-member review requirement | [response] |
-| Merge rule | [response] |
-| Significant Copilot disclosure rule | [response] |
+| Branch naming | [Either a branch including the work or the name of the person completing the work] |
+| Commit message convention | [Short overview of what was added in the commit.] |
+| PR size | [One element] |
+| Another-member review requirement | [Yes] |
+| Merge rule | [Yes] |
+| Significant Copilot disclosure rule | [Yes] |
 
 ## F Issue and backlog index
 
@@ -184,7 +184,7 @@ Why is a high commit count not necessarily evidence of strong contribution?
 
 9. Why should individual contribution not be judged only by commit count?
 
-[Individual contribution should not be judged only by commit count. This is because ]
+[Individual contribution should not be judged only by commit count. This is because the contents of the commit could be small changes such as fixing up spelling mistakes in code or rewriting an already finished feature. This means that even though multiple commits are pushed very little has actually changed.]
 
 10. What is the Stage 6 engineering rule?
 

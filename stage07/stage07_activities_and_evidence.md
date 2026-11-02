@@ -19,10 +19,10 @@ For each requirement, propose one positive test, one negative test and the key a
 
 | Requirement | Positive test | Negative test | Key assertion |
 |---|---|---|---|
-| FR-01 Register patient | [response] | [response] | [response] |
-| FR-05 Prevent practitioner conflict | [response] | [response] | [response] |
-| FR-06 Cancel appointment | [response] | [response] | [response] |
-| FR-07 Retain cancelled history | [response] | [response] | [response] |
+| FR-01 Register patient | [Reigster a patient with a correct ID and Name] | [Register a patient just a name] | [response] |
+| FR-05 Prevent practitioner conflict | [Try to book an already booked appointment] | [Book an empty appointment] | [response] |
+| FR-06 Cancel appointment | [Cancel an appointment that has been booked] | [Cancel an appointment that has already been cancled or is not booked] | [response] |
+| FR-07 Retain cancelled history | [Provide multiple cancelled appointments then view history] | [Attempt to view cancelled appointment history after providing no cancelled appointments] | [response] |
 
 ### Activity 2 Strong or weak assertion
 
@@ -63,7 +63,7 @@ GitHub Copilot generates five tests, all of which pass. Two only assert that obj
 ### Tutorial exit question
 
 Why can 100% code coverage coexist with poor software verification?
-[response]
+[100% code coverage can coexist with poor software verification. This is because code coverage just refers to the percentage of functions that are executed when running a test. This means that code coverage is only testing to see if functions are getting executed and not if they are producing the expected results. ]
 
 ## B Requirement to Test Traceability Matrix
 
@@ -182,25 +182,25 @@ Record actual work in test design, implementation, review, traceability, diagnos
 ## N Formative Questions
 
 1. What question does verification answer?
-[response]
+[Verification checks to see if the program fits the design specifications.]
 
 2. What question does validation answer?
-[response]
+[Validation esnures that the code works properly and is at a usable state for users.]
 
 3. What is a unit test?
-[response]
+[A unit test is creating units that test individual functions to validate if the expected behaviour happens.]
 
 4. What is a pytest fixture?
-[response]
+[A pytest fixture is a defined, reliable, and consistent context for conducting testing.]
 
 5. What is parametrisation in pytest?
-[response]
+[Parametrisation is a testing technique that executes a single function multiple times but with different sets of inputs provided.]
 
 6. What is regression testing?
-[response]
+[Regression testing is testing to ensure that functional and non-functional tests are still providing the expected output after a change. This is to ensure that a change does not break another part of the code.]
 
 7. What does code coverage tell us, and what does it not prove?
-[response]
+[Code coverage tells us the percentage of functions that are executed when running tests. Code coverage does not prove that all those functions are providing the expected outcome.]
 
 8. What makes an assertion weak?
 [response]

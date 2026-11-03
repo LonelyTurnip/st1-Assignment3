@@ -14,11 +14,11 @@ Complete this one group record. Link actual issues, diffs, tests and reviews; av
 ### FR-02 Patient Search
 
 - Title: [Feature - Patient Search]
-- Context: [User looks up a patient using thier ID.]
+- Context: [User looks up a patient using their ID.]
 - Requirement: [If the user exists then their information will be returned. If the patient does not exist or the ID is invalid then an error message will return.]
-- Acceptance criteria: [Patient can be search by the ID. If a valid ID is given then the patient will be returned. If the ID is invalid or no patient exists then an error message will be returned.]
-- Scope: [response]
-- Definition of Done: [response]
+- Acceptance criteria: [Patient can be searched by the ID. If a valid ID is given then the patient will be returned. If the ID is invalid or no patient exists then an error message will be returned.]
+- Scope: [Allow users to search for a patient using a unique ID and return details]
+- Definition of Done: [Patient search functionality is implemented and tested. Valid IDs return relevant information. Invalid IDs return correct error.]
 - Owner: [response]
 - Actual issue link: [response]
 
@@ -28,41 +28,41 @@ Complete this one group record. Link actual issues, diffs, tests and reviews; av
 - Context: [User cancels a booked appointment]
 - Requirement: [When the user cancels an appointment, if the appointment exists and is booked then the cancel will get canceled. If the appointment does not exist or is invalid then an error message will be returned.]
 - Acceptance criteria: [If the user attempts to cancel a valid appointment then the appointment will be modified to be cancelled. If the user tries to cancel an appointment that has already been cancelled or does not exist then an error message will return.]
-- Scope: [response]
-- Definition of Done: [response]
+- Scope: [Allow users to cancel existing appointments while retaining appointment history.]
+- Definition of Done: [Appoitment status chages to cancelled when a valid cancellation occurs. Appointment history remains stored.]
 - Owner: [response]
 - Actual issue link: [response]
 
 ## B Commit quality
 
 | Original example | Strong or Weak | Reason |
-|---|---|---|
-| changes | [Weak] | [Provides no context for what has been changed in the commit] |
-| final version | [Weak] | [Does not explain why this is the final version. Code is also constantly being changes so stating this is the final version is a bad practice.] |
-| Add patient search by ID | [Strong] | [Explains what has been added in the commit] |
-| fix stuff | [Weak] | [Provides no context on what has been fixed] |
-| Prevent cancellation of completed appointments | [Weak] | [Does not explain what has been done to the feature] |
+|---|----------------|---|
+| changes | [Weak]         | [Provides no context for what has been changed in the commit] |
+| final version | [Weak]         | [Does not explain why this is the final version. Code is also constantly being changes so stating this is the final version is a bad practice.] |
+| Add patient search by ID | [Strong]       | [Explains what has been added in the commit] |
+| fix stuff | [Weak]         | [Provides no context on what has been fixed] |
+| Prevent cancellation of completed appointments | [Strong]       | [Clearly describes the behaviour change and the problem being addressed.] |
 
 ## C Over scoped PR review
 
 A cancellation PR also renames unrelated patient fields, restructures unrelated code and adds a new dependency.
 
-- Scope concerns: [response]
-- Responsibility and architecture concerns: [response]
-- Testing and review concerns: [response]
-- Changes to remove or separate, with reasons: [response]
+- Scope concerns: [The pull request contains changes unrelated to appoitnment cancellation, thus, making the review large and difficult to understand.]
+- Responsibility and architecture concerns: [Remaining patient fields and restructuring code may impact other features and violate separation. These changes should be reviewed independently.]
+- Testing and review concerns: [Additional changes increase testing requirements and make it harder to determine if failure is caused by the cancellation feature or other modifications.]
+- Changes to remove or separate, with reasons: [Rename changes, code restructuring, and dependency additions should be moved into separate pull requests so each change can be reviewed, tested and approved independently of one another]
 
 ## D Challenge a weak Copilot review
 
 GitHub Copilot says: "Looks good; tests pass."
 
-- Missing evidence: [What tests passed. What the results of the tests were.]
+- Missing evidence: [What tests passed? What the results of the tests were.]
 - Follow-up review question 1: [What parts of the code did you test?]
 - Follow-up review question 2: [What parts of the code did you not test?]
 - Follow-up review question 3: [What were the results of the tests?]
 - Follow-up review question 4: [What was the input and output of the tests?]
 - Follow-up review question 5: [Did the tests return the expected output?]
-- Additional questions if useful: [response]
+- Additional questions if useful: [Were edge cases tested, such as invalid IDs or missing appointments? Were regression tests performed on existing functionality? Were automated tests, manual tests, or both used? Was test coverage reviewed for the modified code? Were any known limitations or failures identified during testing?]
 
 ## E Team workflow agreement
 
@@ -81,8 +81,8 @@ Create at least two focused issues. Add a linked practitioner-lookup issue or an
 
 | Issue link | Requirement | Owner | Acceptance criteria or precise link | Status |
 |---|---|---|---|---|
-| [issue 1] | [response] | [response] | [response] | [response] |
-| [issue 2] | [response] | [response] | [response] | [response] |
+| [issue 1] | [FR-02 Patient Search] | [response] | [Search by valid ID returns patient information. Invalid ID returns an error.] | [Complete] |
+| [issue 2] | [FR-06 Appointment Cancellation] | [response] | [Valid booked appointments can be cancelled. Invalid cancellations return errors.] | [Complete] |
 
 ## G Pull request evidence
 
@@ -180,7 +180,7 @@ Why is a high commit count not necessarily evidence of strong contribution?
 
 8. What is the appropriate role of GitHub Copilot in pull-request review?
 
-[response]
+[GitHub Copilot should be used as a supporting review tool rather than the final reviewer. Copilot can help identify potential bugs, coding issues, missing tests, or areas requiring attention, but a human reviewer must verify all suggestions and ensure the code meets the project requirements, architecture, and testing standards before approval.]
 
 9. Why should individual contribution not be judged only by commit count?
 
@@ -188,7 +188,7 @@ Why is a high commit count not necessarily evidence of strong contribution?
 
 10. What is the Stage 6 engineering rule?
 
-[response]
+[The Stage 6 engineering rule is that work must be completed through a structured Git workflow using issues, feature branches, commits, pull requests, code review, testing, and evidence-based approval before changes are merged into the main branch.]
 
 ## M Completion and handover
 

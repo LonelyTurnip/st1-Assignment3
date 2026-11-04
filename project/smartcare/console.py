@@ -77,6 +77,11 @@ def run_menu() -> None:
     without crashing.
     """
 
+    data_store = SmartCareDataStore()
+    patient_service = PatientService(data_store)
+    appointment_service = AppointmentService(data_store)
+    practitioner_service = PractitionerService(data_store)
+
     while True:
         print(f"=" * 60)
         print(f" " *22, f"SMARTCARE", f" " * 23)
@@ -102,19 +107,36 @@ def run_menu() -> None:
         if(response == "1"):
             patient_id = input(str("Patient ID: "))
             patient_name = input(str("Patient Name: "))
+            patient_service.register_patient(patient_id, patient_name)
+            print(f"Patient has been registered")
+            print(f"Patient ID: {patient_id} \nName: {patient_name}")
         elif(response == "2"):
             patient_id = input(str("Patient ID: "))
+            patient = patient_service.find_patient(patient_id)
+            if patient == None:
+                print(f"Patient not found") # Currently not working. If you input an invalid patient ID then program crash
+            else:
+                print(f"Patient found. {patient.patient_id}: {patient.name}")
+                print(f"Patient ID: {patient.patient_id} \nName: {patient.name}")
         elif(response == "3"):
             practitioner_id = input(str("Practitioner ID: "))
             practitioner_name = input(str("Practitioner Name: "))
             practitioner_specialty = input(str("Practitioner Specialty: "))
+            practitioner_service.register_practitioner(practitioner_id, practitioner_name, practitioner_specialty)
+            print(f"Practtioner registered successfully")
+            print(f"Practitioner ID: {practitioner_id} \n Practitioner name: {practitioner_name} \n Specialty: {practitioner_specialty}")
         elif(response == "4"):
             practitioner_id = input(str("Practitioner ID: "))
-        elif(response == "5"):
+            practitioner = practitioner_service.find_practitioner(practitioner_id)
+            print(f"Practitioner found. {practitioner.practitioner_id}: {practitioner.name}, {practitioner.specialty}")
+        elif(response == "5"): # Current implementation will crash when a date/time is entered. I believe I know why just ran out of time to implement for the night.
             appointment_id = input(str("Appointment ID: "))
             patient_id = input(str("Patient ID:"))
             practitioner_id = input(str("Practitioner ID: "))
             date_time = input(str("Date/time [YYYY-MM-DD HH:MM]: "))
+            appointment = appointment_service.book_appointment(appointment_id, patient_id, practitioner_id, date_time)
+            print(f"Appointment booked successfully.")
+            print(f"Appointment ID: {appointment.appointment_id}\nPatient: {appointment.patient.name}({appointment.patient.patient_id})\nPractitioner: {appointment.practitioner.name}({appointment.practitioner.practitioner_id})\nSpecialty: {appointment.practitioner.specialty}\nDate/time: {appointment.date_time}\nStatus {appointment.status}\nReference: {appointment.appointment_id}: {appointment.patient.patient_id} with {appointment.practitioner.practitioner_id}, {appointment.date_time}, {appointment.status}")
         elif(response == "6"):
             appointment_id = input(str("Appointment ID: "))
         elif(response == "7"):

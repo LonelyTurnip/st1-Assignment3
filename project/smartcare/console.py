@@ -76,4 +76,57 @@ def run_menu() -> None:
     session's data until exit. main.py reports the incomplete menu
     without crashing.
     """
+
+    while True:
+        print(f"=" * 60)
+        print(f" " *22, f"SMARTCARE", f" " * 23)
+        print(f" " * 17, f"Interactive Console", " " * 18)
+        print(f"=" * 60)
+        print("Session data is temporary and will be discarded when you exit.")
+        print(" ")
+        print(f"MAIN MENU")
+        print(f"-" * 60)
+        print(f"[1] Register patient")
+        print(f"[2] Find patient")
+        print(f"[3] Register practitioner")
+        print(f"[4] Find practitioner")
+        print(f"[5] Book Appointment")
+        print(f"[6] Cancel appointment")
+        print(f"[7] Find appointment")
+        print(f"[8] List practitioner appointments")
+        print(f"[0] Exit")
+
+        response = input(str("Select an option:")).strip()
+
+
+        if(response == "1"):
+            patient_id = input(str("Patient ID: "))
+            patient_name = input(str("Patient Name: "))
+        elif(response == "2"):
+            patient_id = input(str("Patient ID: "))
+        elif(response == "3"):
+            practitioner_id = input(str("Practitioner ID: "))
+            practitioner_name = input(str("Practitioner Name: "))
+            practitioner_specialty = input(str("Practitioner Specialty: "))
+        elif(response == "4"):
+            practitioner_id = input(str("Practitioner ID: "))
+        elif(response == "5"):
+            appointment_id = input(str("Appointment ID: "))
+            patient_id = input(str("Patient ID:"))
+            practitioner_id = input(str("Practitioner ID: "))
+            date_time = input(str("Date/time [YYYY-MM-DD HH:MM]: "))
+        elif(response == "6"):
+            appointment_id = input(str("Appointment ID: "))
+        elif(response == "7"):
+            appointment_id = input(str("Appointment ID: "))
+        elif(response == "8"):
+            practitioner_id = input(str("Practitioner ID: "))
+            status_filter = input(str("Status filter: "))
+        elif(response == "0"):
+            print("Thank you for using SMARTCARE")
+            break
+        else:
+            print("Invalid Response. Please Try Again")
+
+    
     raise NotImplementedError('Stage 9 interactive menu is not yet completed')

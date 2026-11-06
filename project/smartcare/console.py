@@ -129,18 +129,26 @@ def run_menu() -> None:
             practitioner_id = input(str("Practitioner ID: "))
             practitioner = practitioner_service.find_practitioner(practitioner_id)
             print(f"Practitioner found. {practitioner.practitioner_id}: {practitioner.name}, {practitioner.specialty}")
-        elif(response == "5"): # Current implementation will crash when a date/time is entered. I believe I know why just ran out of time to implement for the night.
+        elif(response == "5"): 
             appointment_id = input(str("Appointment ID: "))
             patient_id = input(str("Patient ID:"))
             practitioner_id = input(str("Practitioner ID: "))
-            date_time = input(str("Date/time [YYYY-MM-DD HH:MM]: "))
+            date_time_input = input(str("Date/time [YYYY-MM-DD HH:MM]: "))
+            date_time = datetime.strptime(date_time_input, "%Y-%m-%d %H:%M")
             appointment = appointment_service.book_appointment(appointment_id, patient_id, practitioner_id, date_time)
             print(f"Appointment booked successfully.")
-            print(f"Appointment ID: {appointment.appointment_id}\nPatient: {appointment.patient.name}({appointment.patient.patient_id})\nPractitioner: {appointment.practitioner.name}({appointment.practitioner.practitioner_id})\nSpecialty: {appointment.practitioner.specialty}\nDate/time: {appointment.date_time}\nStatus {appointment.status}\nReference: {appointment.appointment_id}: {appointment.patient.patient_id} with {appointment.practitioner.practitioner_id}, {appointment.date_time}, {appointment.status}")
+            print(format_appointment(appointment))
         elif(response == "6"):
             appointment_id = input(str("Appointment ID: "))
+            appointment = appointment_service.find_appointment(appointment_id)
+            appointment_service.cancel_appointment(appointment_id)
+            print(f"Appointment cancelled successfully.")
+            print(format_appointment(appointment))
         elif(response == "7"):
             appointment_id = input(str("Appointment ID: "))
+            appointment = appointment_service.find_appointment(appointment_id)
+            print(f"Appointment Found.")
+            print(format_appointment(appointment))
         elif(response == "8"):
             practitioner_id = input(str("Practitioner ID: "))
             status_filter = input(str("Status filter: "))

@@ -90,10 +90,12 @@ class SmartCareDataStore:
         if not isinstance(appointment_id, str) or not appointment_id.strip():
             raise ValueError("Appointment ID cannot be blank")
         for appointment in self.list_appointments():
-            if (appointment.appointment_id == appointment_id.strip()
-                    and appointment.status.value != "cancelled"):
+            if appointment.appointment_id == appointment_id.strip():
+                """Added int he line below to allow cancelled appointments to not be found, 
+                which was causing the test to fail."""
+                # and appointment.status.value != "cancelled":
                 return appointment
-        return None
+            return None
 
     def list_appointments(self) -> list[Appointment]:
         """Return a new list containing all stored appointment objects."""
@@ -106,8 +108,12 @@ class SmartCareDataStore:
         exclude_appointment_id: str | None = None,
     ) -> bool:
         for appointment in self.list_appointments():
+            '''In this section, appointment.practitioner.practitioner_id == practitioner_id was
+            changed to appointment.practitioner.practitioner_id != practitioner_id, which 
+            caused the test to fail when a practitioner had an appointment at the same time 
+            as another appointment.'''
             if (appointment.appointment_id != exclude_appointment_id
-                    and appointment.practitioner.practitioner_id != practitioner_id
+                    and appointment.practitioner.practitioner_id == practitioner_id
                     and appointment.date_time == date_time
                     and appointment.status.value == "scheduled"):
                 return True

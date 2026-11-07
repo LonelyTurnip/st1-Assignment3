@@ -170,4 +170,21 @@ class AppointmentService:
         ValueError; a known practitioner with no matches returns an
         empty list.
         """
+        appointments = []
+
+        if not practitioner_id or not isinstance(practitioner_id, str):
+            raise ValueError("Practitioner ID can not be be blank or invalid")
+            return None
+        practitioner = PractitionerService.find_practitioner(practitioner_id)
+
+        if practitioner == None:
+            raise LookupError("Practitioner not found")
+            return None
+        
+        for appointment in Appointment:
+            appointments.append(appointment)
+
+
+
+        
         raise NotImplementedError('Stage 9: practitioner appointments')

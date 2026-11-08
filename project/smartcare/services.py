@@ -174,17 +174,18 @@ class AppointmentService:
 
         if not practitioner_id or not isinstance(practitioner_id, str):
             raise ValueError("Practitioner ID can not be be blank or invalid")
-            return None
         practitioner = PractitionerService.find_practitioner(practitioner_id)
-
         if practitioner == None:
             raise LookupError("Practitioner not found")
-            return None
-        
+
+        if not status or not isinstance(status, str):
+            raise ValueError("Status can not be blank or invalid")
+        appointment_status = status
+
         for appointment in Appointment:
-            appointments.append(appointment)
-
-
-
+            appointment_valid = AppointmentService.find_appointment(appointment)
+            if appointment_valid.practitioner == practitioner and appointment_valid.status == appointment_status:
+                appointments.append(appointment_valid)
+        return appointments
         
         raise NotImplementedError('Stage 9: practitioner appointments')

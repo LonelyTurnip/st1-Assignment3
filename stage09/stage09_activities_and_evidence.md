@@ -25,33 +25,63 @@ What is intentionally lost on exit? <!-- response -->
 
 Plan before AI. This replaces schema/key design; no database tables are required.
 
-| Function or component | Explicit inputs and types | Outputs | Responsibility and validation | Domain source / existing constraint |
-|---|---|---|---|---|
-| appointment_sort_key | | | | |
-| select_appointments | | | | |
-| Service listing | | | | |
-| Console | | | | |
+| Function or component | Explicit inputs and types                           | Outputs              | Responsibility and validation              | Domain source / existing constraint |
+|---|-----------------------------------------------------|----------------------|--------------------------------------------|-------------------------------------|
+| appointment_sort_key | Appointment                                         | tuple(datetime, str) | Produce sorting key only; no state changes | Appointment.date_time and appointment_id                                    |
+| select_appointments | list[Appointment], practitioner_id:str, status:AppointmentStatus None | list[Appointment]    | Filter and sort appointments without modifying source data | Practitioner IDs, AppointmentStatus enum                                    |
+| Service listing | practitioner_id:str, status:AppointmentStatus None  | ordered list of appointments                     | Validate practitioner exists and status is valid | Existing SmartCareDataStore and AppointmentService                                    |
+| Console | User menu inputs                                    | Printed output and service calls                     | Validate user input and recover from errors | Existing service layer rules                                    |
 
-Relate patient ID/name, practitioner ID/name/specialty, and appointment ID/actual participants/date_time/status to the existing contracts: <!-- response -->
+Relate patient ID/name, practitioner ID/name/specialty, and appointment ID/actual participants/date_time/status to the existing contracts: <!-- Patient = patient ID and patient name.
+Practitioner = practitioner ID, practitioner name, specialty.
+Appointment = appointment ID, patient object, practitioner object, date/time, status.
+Appointment objects reference actual Patient and Practitioner objects rather than duplicate data.
+Appointment status is restricted to values defined by AppointmentStatus. -->
 
 ### A3 Responsibility violations
 
-| Conceptual case | Violation | Correct boundary and reason |
-|---|---|---|
-| Appointment.cancel reads input | | |
-| Service prints/reads the menu | | |
-| Query sorts its source in place | | |
-| Store prints Appointment saved | | |
+| Conceptual case | Violation | Correct boundary and reason                                                                    |
+|---|---|------------------------------------------------------------------------------------------------|
+| Appointment.cancel reads input | Domain object performing UI tasks| Input should be handled by console/service layer; domain object only manages state transitions |
+| Service prints/reads the menu | Service layer performing UI work| UI belongs in console layer; services coordinate business logic                                |
+| Query sorts its source in place | Query mutates supplied data| Queries should be pure and return new lists                                                                                               |
+| Store prints Appointment saved | Data store performing presentation tasks| Data store should manage storage only                                                                                               |
 
 ### A4 Sorting comparison
 
-For `appointments.sort(key=appointment_sort_key)` and `result = sorted(appointments, key=appointment_sort_key)`, predict source order, return value and result identity. Give a meaningful mutation check: <!-- response -->
+For `appointments.sort(key=appointment_sort_key)` and `result = sorted(appointments, key=appointment_sort_key)`, predict source order, return value and result identity. Give a meaningful mutation check: <!-- appointments.sort(key=appointment_sort_key)
+Source list is modified.
+Sort occurs in place.
+Returns None.
+Original object remains the same list object.
+ 
+sorted(appointments, key=appointment_sort_key)
+Source list remains unchanged.
+Returns a new sorted list.
+Result is a different list object.
 
-Score-example prediction and explanation of passing the named key: <!-- response -->
+Meaningful mutation check 
+before = list(appointments)
+select_appointments(appointments, "D1")
+assert appointments == before -->
+
+Score-example prediction and explanation of passing the named key: <!-- Why the named key is passed:
+sorted(appointments, key=appointment_sort_key)
+passes the function itself, allowing Python to compute a consistent ordering using:
+(appointment.date_time,
+    appointment.appointment_id, 
+)
+Equal appointment times are resolved using appointment ID as the tie-breaker.-->
 
 ### A5 Exit question
 
-Explain cancellation versus deletion, and checks for same-session lookup, all-status listing and SCHEDULED-only exclusion: <!-- response -->
+Explain cancellation versus deletion, and checks for same-session lookup, all-status listing and SCHEDULED-only exclusion: <!-- Cancellation changes an appointment's status to CANCELLED while retaining the appointment in the system. Deletion would remove the appointment entirely from storage.
+Verification should confirm:
+- cancelled appointments can still be found using lookup;
+- cancelled appointments remain visible in appointment listing;
+- status filtering behaves correctly;
+- cancellation does not remove appointment history;
+- only scheduled appointments participate in practitioner conflict checking. -->
 
 ## B. Human design and contracts
 
@@ -104,7 +134,7 @@ Responsibility check: explain how domain invariants, shared-store collections, s
 
 ## G. Ten formative answers
 
-1. What makes select_appointments pure, and what side effect breaks purity? <!-- response -->
+1. What makes select_appointments pure, and what side effect breaks purity? <!-- select_appointments() is pure because it depends only on its inputs and does not modify state, perform I/O, or alter the supplied collections. Modifying the source list, printing output, or storing information outside the function would introduce side effects and break purity. -->
 2. Which explicit inputs are needed, and why avoid a global store? <!-- response -->
 3. How can a new list reuse Appointment objects safely? <!-- response -->
 4. Why use a named key, and what breaks equal-time ties? <!-- response -->

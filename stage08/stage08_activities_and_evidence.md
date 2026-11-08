@@ -191,18 +191,48 @@ test_repeat_cancel_appointment before any code changes were applied.]
 Use the full handout prompt separately for BOTH defects, after E. Keep each actual prompt or accessible reference; include observed behaviour, expected behaviour, reproduction, failing test, human hypothesis, relevant code, three ranked causes and discriminating checks, with the no-rewrite/no-invented-requirements constraints.
 
 ### F8-01 Copilot review
-Actual prompt / output reference and member: [complete]
-1. Ranked suggestion / evidence check / observed evidence / correct, partly correct or wrong / accept, modify or reject with reason: [complete]
-2. Ranked suggestion / evidence check / observed evidence / correct, partly correct or wrong / accept, modify or reject with reason: [complete]
-3. Ranked suggestion / evidence check / observed evidence / correct, partly correct or wrong / accept, modify or reject with reason: [complete]
-Final human conclusion and comparison with initial hypothesis: [complete]
+Actual prompt / output reference and member: [Prompted GitHub Copilot to identify possible causes for practitioner conflict detection failures in has_practitioner_conflict().]
+1. Ranked suggestion / evidence check / observed evidence / correct, partly correct or wrong / accept, modify or reject with reason: [Suggestion: Conflict comparison logic contains an incorrect operator.
+Evidence check: Reviewed has_practitioner_conflict().
+Observed evidence: != practitioner_id used instead of == practitioner_id.
+Assessment: Correct.
+Decision: Accept.
+Reason: Matches both failing test behaviour and code inspection.]
+2. Ranked suggestion / evidence check / observed evidence / correct, partly correct or wrong / accept, modify or reject with reason: [Suggestion: Conflict validation method is not being called.
+Evidence check: Reviewed booking call path.
+Observed evidence: Method was called correctly.
+Assessment: Wrong.
+Decision: Reject.
+Reason: Runtime behaviour confirmed execution.]
+3. Ranked suggestion / evidence check / observed evidence / correct, partly correct or wrong / accept, modify or reject with reason: [Suggestion: Date/time values are being compared incorrectly.
+Evidence check: Examined datetime comparisons.
+Observed evidence: Comparison logic operated correctly.
+Assessment: Partly plausible but unsupported.
+Decision: Reject.
+Reason: No evidence found.]
+Final human conclusion and comparison with initial hypothesis: [The final diagnosis matched the initial human hypothesis that the conflict detection logic itself was incorrect.]
 
 ### F8-02 Copilot review
-Actual prompt / output reference and member: [complete]
-1. Ranked suggestion / evidence check / observed evidence / correct, partly correct or wrong / accept, modify or reject with reason: [complete]
-2. Ranked suggestion / evidence check / observed evidence / correct, partly correct or wrong / accept, modify or reject with reason: [complete]
-3. Ranked suggestion / evidence check / observed evidence / correct, partly correct or wrong / accept, modify or reject with reason: [complete]
-Final human conclusion and comparison with initial hypothesis: [complete]
+Actual prompt / output reference and member: [Prompted GitHub Copilot to identify possible causes of appointment lookup failures following cancellation.]
+1. Ranked suggestion / evidence check / observed evidence / correct, partly correct or wrong / accept, modify or reject with reason: [Suggestion: Appointment deletion occurs after cancellation.
+Evidence check: Inspected appointment storage.
+Observed evidence: Appointments remained stored.
+Assessment: Wrong.
+Decision: Reject.
+Reason: No deletion occurred.]
+2. Ranked suggestion / evidence check / observed evidence / correct, partly correct or wrong / accept, modify or reject with reason: [Suggestion: Lookup logic filters cancelled appointments.
+Evidence check: Reviewed find_appointment().
+Observed evidence: Condition excluded appointments with status "cancelled".
+Assessment: Correct.
+Decision: Accept.
+Reason: Directly explained failing tests.]
+3. Ranked suggestion / evidence check / observed evidence / correct, partly correct or wrong / accept, modify or reject with reason: [Suggestion: Appointment status corruption occurs during cancellation.
+Evidence check: Reviewed appointment status values.
+Observed evidence: Status transitioned correctly to CANCELLED.
+Assessment: Wrong.
+Decision: Reject.
+Reason: No evidence of corruption.]
+Final human conclusion and comparison with initial hypothesis: [The final diagnosis closely matched the initial hypothesis that lookup behaviour rather than cancellation behaviour was responsible for the observed failure.]
 
 ## G. Failing to passing regression evidence
 
@@ -220,17 +250,20 @@ Unrelated failures investigated / resolution: [Not applicable. The only initial 
 
 ## H. Refactoring decision and before/after verification
 
-Smell and exact location: [complete]
-Small proposed structural change / why justified: [complete before editing]
-External behaviour to preserve / relevant tests: [complete]
+Smell and exact location: [SmartCareDataStore.find_appointment() and SmartCareDataStore.has_practitioner_conflict()]
+Small proposed structural change / why justified: [A potential future refactor would be replacing string literals such as "Cancelled" and "scheduled" with direct use of the existing Appointment Status enum to improve maintainability and reduce the risk of typological erros.]
+External behaviour to preserve / relevant tests: [The following behaviours must remain unchanged: Appointment cancellation remains possible, Cancelled appointments remain retrievable, Practitioner conflict detection rejects double-bookings, Different practitioners may book appointments at the same time.
+Relevant tests: test_cancel_appointment
+test_repeat_cancel_appointment
+test_conflict_rule_and_different_practitioner]
 Before result: see G, full passing suite.
-Actual change / diff / separate refactor SHA: [complete]
-Focused and full after-refactor commands / working directory / results / evidence: [complete]
-Result — accepted, revised or rejected / reason / behaviour-preservation conclusion: [complete]
+Actual change / diff / separate refactor SHA: [No separate refactor was performed. Only the identified defects were repaired. No refactor commit was created.]
+Focused and full after-refactor commands / working directory / results / evidence: [Not applicable because no separate refactoring activity was undertaken.]
+Result — accepted, revised or rejected / reason / behaviour-preservation conclusion: [Refactoring was deferred. The focus of Stage 8 was repairing the injected faults using the smallest justified changes while preserving required behaviour.]
 
 ## I. Git, human review and integration
 
-Issues for both defects / refactor scope and owners: [complete]
+Issues for both defects / refactor scope and owners: [F8-01 Practitioner conflict defect: Alexandria; F8-02 Retained history defect: Alexandria; Refactor scope: Not applicable.]
 Branch / prepared, repair and refactor checkpoints: [link B/C/D/H]
 PR link and another member's reviewer identity: [complete]
 Key human feedback, difference from Copilot findings and response/outcome: [complete]

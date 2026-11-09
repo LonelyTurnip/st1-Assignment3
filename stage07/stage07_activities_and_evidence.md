@@ -17,36 +17,46 @@ All Assignment 3 stage materials are provided from the beginning. Complete this 
 
 For each requirement, propose one positive test, one negative test and the key assertion.
 
-| Requirement | Positive test | Negative test | Key assertion |
-|---|---|---|---|
-| FR-01 Register patient | [response] | [response] | [response] |
-| FR-05 Prevent practitioner conflict | [response] | [response] | [response] |
-| FR-06 Cancel appointment | [response] | [response] | [response] |
-| FR-07 Retain cancelled history | [response] | [response] | [response] |
+| Requirement | Positive test | Negative test | Key assertion                                                                                    |
+|---|---|---|--------------------------------------------------------------------------------------------------|
+| FR-01 Register patient | [Reigster a patient with a correct ID and Name] | [Register a patient just a name] | [Assert that a patient record is created and stored only when ID and name are provided]          |
+| FR-05 Prevent practitioner conflict | [Try to book an already booked appointment] | [Book an empty appointment] | [Assert that conflicting bookings are rejected while available are successfully booked]          |
+| FR-06 Cancel appointment | [Cancel an appointment that has been booked] | [Cancel an appointment that has already been cancled or is not booked] | [Assert that appoitnment status changes to cancelled only for valid appoitnments]                |
+| FR-07 Retain cancelled history | [Provide multiple cancelled appointments then view history] | [Attempt to view cancelled appointment history after providing no cancelled appointments] | [Assert that cancelled appoitnments remain accessible in appoitnment history after cancellation] |
 
 ### Activity 2 Strong or weak assertion
 
 For each, select Strong for stated behaviour or Weak/unclear and explain why. State the behaviour and limits.
 
 `assert True`
-Judgement: [Strong for stated behaviour / Weak/unclear]  Why: [response]
+Judgement: [Unclear]  Why: [Assert True is unclear on what is assumed to be true.]
 
 `assert appointment is not None`
-Judgement: [Strong for stated behaviour / Weak/unclear]  Why: [response]
+Judgement: [Strong]  Why: [Assert appointment is not none is strong as it states what element it is asserting and clearly stating what it thinks it should be.]
 
 `assert appointment.status == AppointmentStatus.CANCELLED`
-Judgement: [Strong for stated behaviour / Weak/unclear]  Why: [response]
+Judgement: [Strong]  Why: [This directly verifies the required behaviour by chacking the exact state change that should occur after cancellation.]
 
 `assert len(results) > 0`
-Judgement: [Strong for stated behaviour / Weak/unclear]  Why: [response]
+Judgement: [Weak/unclear]  Why: [While this confirms that some result exists, it doesn't verify the correct result was returned.]
 
 `assert data_store.find_appointment('A1') is appointment`
-Judgement: [Strong for stated behaviour / Weak/unclear]  Why: [response]
+Judgement: [Strong]  Why: [this verifies that the datastore returns the expected appointment object for the supplied appointment ID]
 
 ### Activity 3 Boundary thinking
 
 Design boundary or edge cases for blank identifiers, whitespace-only names, same-time practitioner bookings, cancelled appointments and invalid status transitions.
-For each input/state, expected result and supporting contract: [response]
+For each input/state, expected result and supporting contract: 
+
+| [Input]                                          | [Expected Result]                                           | [Supporting Contract]          |
+|--------------------------------------------------|-------------------------------------------------------------|--------------------------------|
+| [Blank patient ID ("")]                          | [Patient registration rejected]                             | [Patient ID must not be blank] |
+| [Whitespace-only patient name (" ")]             | [Registration rejected]                                     | [Patient name must contain valid characters]                     |
+| [Practitioner already booked for same date/time] | [Appointment booking rejected]                              | [Practitioners cannot have conflicting appointments]                     |
+| [Cancelled appointment booked again]             | [Operation rejected or handled according to business rules] | [Cancelled appointments cannot be reused without explicit rebooking]                     |
+| [Transition from CANCELLED to COMPLETED]         | [Invalid transition rejected]                               | [Appointment state transitions must follow the defined workflow]                     | 
+| [Duplicate patient ID]                                               | [Registration rejected]                                                          | [Patient IDs must be unique]                             |
+| [Null appointment ID]                                               | [Search fails with validation error]                                                          | [Appointment identifiers are required]                             |
 
 ### Activity 4 Critique GitHub Copilot tests
 
@@ -54,16 +64,16 @@ GitHub Copilot generates five tests, all of which pass. Two only assert that obj
 
 | Candidate | What is wrong | Rewritten test intention |
 |---|---|---|
-| 1 | [response] | [response] |
-| 2 | [response] | [response] |
-| 3 | [response] | [response] |
-| 4 | [response] | [response] |
-| 5 | [response] | [response] |
+| 1 | [Only verifies existence, not correctness] | [Verify a patient record contains the expected ID and name] |
+| 2 | [Does not validate business rules] | [Verify cancelling a booked appointment changes its status to CANCELLED] |
+| 3 | [Verifies nothing about system behaviour] | [Verify a valid patient registration creates a stored patient record] |
+| 4 | [SMS functionality is not part of the requirement] | [Verify appointment cancellation is recorded in appointment history] |
+| 5 | [Tests an invented requirement] | [Verify invalid appointment cancellation returns the expected error] |
 
 ### Tutorial exit question
 
 Why can 100% code coverage coexist with poor software verification?
-[response]
+[100% code coverage can coexist with poor software verification. This is because code coverage just refers to the percentage of functions that are executed when running a test. This means that code coverage is only testing to see if functions are getting executed and not if they are producing the expected results. ]
 
 ## B Requirement to Test Traceability Matrix
 
@@ -117,11 +127,11 @@ Connect cases to actual contracts and verify unchanged state after rejection.
 
 Select ONE real acceptance criterion. Complete human-first fields before using Copilot. Do not require an accepted generated test.
 
-Requirement: [complete]
-Acceptance criterion: [quote]
-Behaviour to test: [complete]
-Human-first test idea/categories: [complete]
-Prompt and purpose: [complete or link]
+Requirement: [FR-06 Cancel Appointment]
+Acceptance criterion: ["If the user attempts to cancel a valid appointment then the appointment will be modified to be cancelled."]
+Behaviour to test: [Appointment status changes from BOOKED to CANCELLED.]
+Human-first test idea/categories: [Positive test, state transition verification, status validation.]
+Prompt and purpose: [Generate test ideas for validating appointment cancellation behaviour.]
 
 For each significant candidate, copy this entry as needed:
 - Copilot test idea/candidate: [complete]
@@ -182,34 +192,34 @@ Record actual work in test design, implementation, review, traceability, diagnos
 ## N Formative Questions
 
 1. What question does verification answer?
-[response]
+[Verification checks to see if the program fits the design specifications.]
 
 2. What question does validation answer?
-[response]
+[Validation esnures that the code works properly and is at a usable state for users.]
 
 3. What is a unit test?
-[response]
+[A unit test is creating units that test individual functions to validate if the expected behaviour happens.]
 
 4. What is a pytest fixture?
-[response]
+[A pytest fixture is a defined, reliable, and consistent context for conducting testing.]
 
 5. What is parametrisation in pytest?
-[response]
+[Parametrisation is a testing technique that executes a single function multiple times but with different sets of inputs provided.]
 
 6. What is regression testing?
-[response]
+[Regression testing is testing to ensure that functional and non-functional tests are still providing the expected output after a change. This is to ensure that a change does not break another part of the code.]
 
 7. What does code coverage tell us, and what does it not prove?
-[response]
+[Code coverage tells us the percentage of functions that are executed when running tests. Code coverage does not prove that all those functions are providing the expected outcome.]
 
 8. What makes an assertion weak?
-[response]
+[An assertion is weak when it is unclear what is being asserted.]
 
 9. What is the appropriate role of GitHub Copilot as a test assistant?
-[response]
+[GitHub Copilot should be used to asit with generating test ideas, structures and possible edge cases. However, all generated tests must be reviewed by a human to ensure they accurately trace requirements, verify behaviour, use assertions and don't introduce assumptions or business rules that are not part of the specification.]
 
 10. What is the Stage 7 engineering rule?
-[response]
+[The Stage 7 engineering rule is that every implemented requirement must have traceable tests with meaningful assertions that verify observable behaviour. Tests must be linked to requirements and acceptance criteria, reviewed critically, and executed to provide evidence that the system behaves correctly.]
 
 ## O Stage Completion
 

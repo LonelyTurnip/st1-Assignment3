@@ -4,14 +4,14 @@
 import re
 from datetime import datetime
 
+from smartcare import data_store
 from smartcare.data_store import SmartCareDataStore
-from smartcare.domain import Appointment
+from smartcare.domain import Appointment, AppointmentStatus
 from smartcare.services import (
     AppointmentService,
     PatientService,
     PractitionerService,
 )
-
 
 def parse_date_time(text: str) -> datetime:
     """Parse YYYY-MM-DD HH:MM; raise ValueError for invalid input."""
@@ -70,7 +70,7 @@ def run_demo() -> None:
 
 
 def run_menu() -> None:
-    """Stage 9: implement the register/find/book/cancel/list/exit menu.
+    data_store = SmartCareDataStore()
 
     Call services, recover from expected input errors, and keep this
     session's data until exit. main.py reports the incomplete menu
@@ -103,100 +103,63 @@ def run_menu() -> None:
 
         response = input(str("Select an option:")).strip()
 
-
-        if(response == "1"):
-            patient_id = input(str("Patient ID: "))
-            patient_name = input(str("Patient Name: "))
-            try:
+        try:
+            if(response == "1"):
+                patient_id = input(str("Patient ID: "))
+                patient_name = input(str("Patient Name: "))
                 patient_service.register_patient(patient_id, patient_name)
-            except ValueError:
-                print("Patient ID already exists")
-            else:
                 print(f"Patient has been registered")
                 print(f"Patient ID: {patient_id} \nName: {patient_name}")
-        elif(response == "2"):
-            patient_id = input(str("Patient ID: "))
-            try: 
+            elif(response == "2"):
+                patient_id = input(str("Patient ID: "))
                 patient = patient_service.find_patient(patient_id)
-            except LookupError:
-                print("Patiient not found.")
-            except ValueError:
-                print("Invalid patient ID. Please enter a valid patient ID.")
-            else:
                 print(f"Patient found. {patient.patient_id}: {patient.name}")
-                print(f"Patient ID: {patient.patient_id} \nName: {patient.name}")
-        elif(response == "3"):
-            practitioner_id = input(str("Practitioner ID: "))
-            practitioner_name = input(str("Practitioner Name: "))
-            practitioner_specialty = input(str("Practitioner Specialty: "))
-            try:
+            elif(response == "3"):
+                practitioner_id = input(str("Practitioner ID: "))
+                practitioner_name = input(str("Practitioner Name: "))
+                practitioner_specialty = input(str("Practitioner Specialty: "))
                 practitioner_service.register_practitioner(practitioner_id, practitioner_name, practitioner_specialty)
-            except ValueError:
-                print("Practitioner ID already exists.")
-            else:
-                print(f"Practtioner registered successfully")
-                print(f"Practitioner ID: {practitioner_id} \nPractitioner name: {practitioner_name} \nSpecialty: {practitioner_specialty}")
-        elif(response == "4"):
-            practitioner_id = input(str("Practitioner ID: "))
-            try:
+                print(f"Practitioner registered successfully")
+                print(f"Practitioner ID: {practitioner_id} \n Practitioner name: {practitioner_name} \n Specialty: {practitioner_specialty}")
+            elif(response == "4"):
+                practitioner_id = input(str("Practitioner ID: "))
                 practitioner = practitioner_service.find_practitioner(practitioner_id)
-            except LookupError:
-                print("Practitioner not found.")
-            except ValueError:
-                print("Invalid practitioner ID. Please enter a valid practitioner ID.")
-            else:
                 print(f"Practitioner found. {practitioner.practitioner_id}: {practitioner.name}, {practitioner.specialty}")
-                print(f"Practitioner ID: {practitioner_id} \nPractitioner name: {practitioner_name} \nSpecialty: {practitioner_specialty}")
-
-        elif(response == "5"): 
-            appointment_id = input(str("Appointment ID: "))
-            patient_id = input(str("Patient ID:"))
-            practitioner_id = input(str("Practitioner ID: "))
-            date_time_input = input(str("Date/time [YYYY-MM-DD HH:MM]: "))
-            date_time = datetime.strptime(date_time_input, "%Y-%m-%d %H:%M")
-            try:
+            elif(response == "5"): 
+                appointment_id = input(str("Appointment ID: "))
+                patient_id = input(str("Patient ID:"))
+                practitioner_id = input(str("Practitioner ID: "))
+                date_time_input = input(str("Date/time [YYYY-MM-DD HH:MM]: "))
+                date_time = parse_date_time(date_time_input)
                 appointment = appointment_service.book_appointment(appointment_id, patient_id, practitioner_id, date_time)
-            except LookupError as e:
-                if str(e) == "Patient not found":
-                    print("Patient not found.")
-                if str(e) == "Practitioner not found":
-                    print("Practitioner not found.")
-            except ValueError as e:
-                if str(e) == "Appintment ID already exitst":
-                    print("Appointment ID already exists.")
-                if str(e) == "Practitioner already has a SCHEDULED appointment at this time":
-                    print("Practitioner already has a SCHEDULED appointment at this time.")
-            else:
                 print(f"Appointment booked successfully.")
                 print(format_appointment(appointment))
-        elif(response == "6"):
-            appointment_id = input(str("Appointment ID: "))
-            try:
-                appointment = appointment_service.cancel_appointment(appointment_id)
-            except ValueError:
-                print("Appointment ID cannot be blank or invalid.")
-            except LookupError:
-                print("Appointment not found.")
-            else:    
+            elif(response == "6"):
+                appointment_id = input(str("Appointment ID: "))
+                appointment = appointment_service.find_appointment(appointment_id)
+                appointment_service.cancel_appointment(appointment_id)
                 print(f"Appointment cancelled successfully.")
                 print(format_appointment(appointment))
-        elif(response == "7"):
-            appointment_id = input(str("Appointment ID: "))
-            try:
+            elif(response == "7"):
+                appointment_id = input(str("Appointment ID: "))
                 appointment = appointment_service.find_appointment(appointment_id)
-            except LookupError:
-                print("Appointment not found")
-            else:
                 print(f"Appointment Found.")
                 print(format_appointment(appointment))
-        elif(response == "8"):
-            practitioner_id = input(str("Practitioner ID: "))
-            status_filter = input(str("Status filter: "))
-        elif(response == "0"):
-            print("Thank you for using SMARTCARE")
-            break
-        else:
-            print("Invalid Response. Please Try Again")
-
-    
-    raise NotImplementedError('Stage 9 interactive menu is not yet completed')
+            elif(response == "8"):
+                practitioner_id = input(str("Practitioner ID: "))
+                status_text = input(str("Status filter (blank for all): ")).strip()
+                status = AppointmentStatus(status_text.lower()) if status_text else None
+                results = appointment_service.list_practitioner_appointments(
+                    practitioner_id, status,
+                )
+                if not results:
+                    print(f"No appointments found for practitioner {practitioner_id}.")
+                for appointment in results:
+                    print(format_appointment(appointment))
+            elif(response == "0"):
+                print("Thank you for using SMARTCARE")
+                break
+            else:
+                print("Invalid Response. Please Try Again")
+        except (ValueError, LookupError) as error:
+            print(f"Error: {error}")

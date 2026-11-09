@@ -114,6 +114,10 @@ class SmartCareDataStore:
         exclude_appointment_id: str | None = None,
     ) -> bool:
         for appointment in self.list_appointments():
+            '''In this section, appointment.practitioner.practitioner_id == practitioner_id was
+            changed to appointment.practitioner.practitioner_id != practitioner_id, which 
+            caused the test to fail when a practitioner had an appointment at the same time 
+            as another appointment.'''
             if (appointment.appointment_id != exclude_appointment_id
             #changed != to ==
                     and appointment.practitioner.practitioner_id == practitioner_id

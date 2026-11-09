@@ -4,6 +4,7 @@
 import re
 from datetime import datetime
 
+from smartcare import data_store
 from smartcare.data_store import SmartCareDataStore
 from smartcare.domain import Appointment, AppointmentStatus
 from smartcare.services import (
@@ -69,7 +70,7 @@ def run_demo() -> None:
 
 
 def run_menu() -> None:
-    """Stage 9: implement the register/find/book/cancel/list/exit menu.
+    data_store = SmartCareDataStore()
 
     Call services, recover from expected input errors, and keep this
     session's data until exit. main.py reports the incomplete menu

@@ -2,7 +2,7 @@
 
 import argparse
 
-from smartcare.console import run_demo, run_menu
+from smartcare.console import run_menu, run_demo
 
 
 def main() -> None:
@@ -16,7 +16,6 @@ def main() -> None:
         run_menu()
     else:
         run_demo()
-
-
 if __name__ == '__main__':
     main()
+

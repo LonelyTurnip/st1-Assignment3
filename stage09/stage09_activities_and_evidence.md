@@ -12,14 +12,15 @@ Stage 8 integrated SHA, command, working directory and actual result: <!-- compl
 
 | Information | Required session/domain or transient state? | Requirement or reason |
 |---|---|---|
-| Patient identity | | |
-| Appointment history | | |
-| Temporary menu choice | | |
-| Practitioner specialty | | |
-| Debug print output | | |
-| Appointment status | | |
+| Patient identity | Session/domain state | Needed for operations during the run, but stored only in memory. |
+| Appointment history | Session/domain state | Needed to find and list appointments during the run; cancellation retains records until exit. |
+| Temporary menu choice | Transient state | Used to select the current operation, not retained as domain data. |
+| Practitioner specialty | Session/domain state | A practitioner attribute used during the session. |
+| Debug print output | Transient | Diagnostic output is not part of the stored domain model. |
+| Appointment status | Session/domain state | It is part of each appointment and changes during the session. |
 
-What is intentionally lost on exit? <!-- response -->
+What is intentionally lost on exit? 
+    All in-memory patients, practitioners, appointments, and their statuses. The application does not persist them.
 
 ### A2 Interface and domain data plan
 
@@ -85,13 +86,18 @@ Verification should confirm:
 
 ## B. Human design and contracts
 
-Complete before GitHub Copilot. Record any interface/integrity decision and its reasoning: <!-- response -->
+Complete before GitHub Copilot. Record any interface/integrity decision and its reasoning: 
+    The query receives the appointment list, practitioner ID, and optional AppointmentStatus explicitly rather than reading a global store. It returns a new sorted list, retaining references to the original appointment objects. The service validates practitioner existence and status before calling the query. Booking must use the actual registered participant objects, and failed operations must not alter stored records.
 
 | Requirement | Input / session data | Operation and responsible component | Expected result or error | Test / evidence |
-|---|---|---|---|---|
-| | | | | |
+| FR-01–03 registration and lookup | IDs and required participant fields | Domain validates fields; services coordinate registration and lookup through the store | Valid records are stored and found; invalid fields raise ValueError, missing records raise LookupError |
+| FR-04–05 booking and conflicts | Appointment ID, registered participant IDs, date/time | Appointment service resolves registered objects, checks duplicates/conflicts, then stores the appointment | Valid booking succeeds; missing participants raise LookupError; duplicate IDs or a scheduled same-practitioner/time conflict raise ValueError |
+| FR-06–08 cancellation and history | Appointment ID and stored appointment | Service calls the domain cancellation transition; store retains the object | Scheduled appointment becomes cancelled; unknown appointment raises LookupError; invalid/repeated cancellation raises ValueError without changing status |
+| FR-09 / QRY / FP listing | Practitioner ID, optional enum status, appointment list | Service validates; pure query filters and sorts | Unknown practitioner or invalid status is an error; known practitioner with no matches gets an empty list. No status means all statuses |
+| UI-01–02 console | Menu choice and operation fields | Console parses input, converts a supplied status to the enum, calls services, displays errors/results | Expected ValueError/LookupError are reported and the menu continues; invalid menu choices are rejected |
 
-Cover QRY-01–04, FP-01–03, UI-01–02 and relevant FR-01–09. Explain empty versus unknown versus invalid, enum conversion, actual object identity, error handling and unchanged state on rejection: <!-- response -->
+Cover QRY-01–04, FP-01–03, UI-01–02 and relevant FR-01–09. Explain empty versus unknown versus invalid, enum conversion, actual object identity, error handling and unchanged state on rejection:
+    For a rejected operation, capture the store’s records and relevant fields before the call, then compare them after: IDs, list order, participant references, date/time, and status. Follow with a valid operation to show the session remains usable.
 
 ## C. Implementation and query verification
 
@@ -101,8 +107,10 @@ Cover QRY-01–04, FP-01–03, UI-01–02 and relevant FR-01–09. Explain empty
 
 Include practitioner isolation, every enum status/default all, equal-time ID tie-break, named-key reuse, repeated calls, empty/already-sorted fresh lists, unchanged source order/fields, known-empty/unknown/invalid service cases and retained history.
 
-Purity explanation from code inspection, including absence of hidden state and I/O: <!-- response -->
-What the tests do and do not establish: <!-- response -->
+Purity explanation from code inspection, including absence of hidden state and I/O: 
+    Purity explanation: appointment_sort_key derives a tuple from one appointment. select_appointments reads its arguments, builds a filtered list, and sorts that new list; it does not print, access a global store, or mutate the supplied list or appointments.
+What the tests do and do not establish: 
+    The inspected tests contain assertions for those cases, but I have not run them, so don’t report a pass or count based on this review. The visible tests do not individually establish every requested case—for example, repeated calls, fresh-list identity for already-sorted input, every enum status, or unchanged appointment fields after a failed operation. They also don’t demonstrate the full interactive console workflow. Add or run evidence for those before marking them verified.
 
 ## D. Integrated console and workflow evidence
 
@@ -124,26 +132,41 @@ Actual response: <!-- accessible reference -->
 |---|---|---|---|---|---|
 | | | | | | |
 
-Responsibility check: explain how domain invariants, shared-store collections, service coordination, pure queries and console effects remain separate: <!-- response -->
+Responsibility check: explain how domain invariants, shared-store collections, service coordination, pure queries and console effects remain separate: 
+    Domain objects validate their own data and enforce appointment status transitions. The data store owns the session collections and returns new lists of stored objects. Services coordinate validation, lookups, booking, cancellation, and listing. Pure queries filter and sort without I/O or mutation. The console owns prompts, parsing, and printed output.
 
 ## F. Required reflections
 
-1. Which integration concern was architectural rather than a filtering/sorting detail? <!-- response -->
+1. Which integration concern was architectural rather than a filtering/sorting detail?  
+    Ensuring the services and console use the same session-scoped store, and that appointment history is retained rather than removed on cancellation. That is an integration/data-lifecycle concern, not a sorting detail.  
 2. Which Copilot suggestion did you reject as over-engineering, and why? <!-- response -->
-3. How did you prove cancelled appointments remain retrievable and listable in the same session? <!-- response -->
+3. How did you prove cancelled appointments remain retrievable and listable in the same session? 
+    The tests in test_services.py assert that cancellation returns the same appointment, lookup still finds it, and its status is CANCELLED. test_workflows.py asserts a cancelled appointment remains in the default listing. Report these as executed evidence only after running the tests
 
 ## G. Ten formative answers
 
-1. What makes select_appointments pure, and what side effect breaks purity? <!-- select_appointments() is pure because it depends only on its inputs and does not modify state, perform I/O, or alter the supplied collections. Modifying the source list, printing output, or storing information outside the function would introduce side effects and break purity. -->
-2. Which explicit inputs are needed, and why avoid a global store? <!-- response -->
-3. How can a new list reuse Appointment objects safely? <!-- response -->
-4. Why use a named key, and what breaks equal-time ties? <!-- response -->
-5. How do default and explicit status filters differ? <!-- response -->
-6. How do empty, unknown practitioner and invalid filter cases differ? <!-- response -->
-7. Which console errors recover, and how is unchanged state checked? <!-- response -->
-8. What is data integrity for registered participants, conflicts and history? <!-- response -->
-9. What is Copilot's review role, and who verifies findings? <!-- response -->
-10. How do pure functions and OOP responsibilities work together? <!-- response -->
+1. What makes select_appointments pure, and what side effect breaks purity? 
+    select_appointments() is pure because it depends only on its inputs and does not modify state, perform I/O, or alter the supplied collections. Modifying the source list, printing output, or storing information outside the function would introduce side effects and break purity.
+2. Which explicit inputs are needed, and why avoid a global store? 
+    The query needs the appointment list, practitioner ID, and optional status: list[Appointment], str, and AppointmentStatus | None. The sort-key function needs one Appointment. Avoiding a global store makes the query’s dependencies explicit, easier to test, and reusable without hidden state.
+3. How can a new list reuse Appointment objects safely? 
+    select_appointments builds and returns a new list, so sorting or filtering it does not reorder the caller’s list. The returned list contains the same Appointment objects, which is safe here because the query reads them without changing them. Callers should remember that those objects are shared references.
+4. Why use a named key, and what breaks equal-time ties?   
+    A named key makes the ordering rule explicit and reusable: appointment_sort_key returns (date_time, appointment_id). Passing it as key=appointment_sort_key lets Python call it for each appointment. The ID breaks ties when two appointments have the same time.
+5. How do default and explicit status filters differ? 
+    With no status (None), the listing includes every status. An explicit AppointmentStatus filters to appointments with that status. In the console, a blank filter means all statuses; a supplied value is converted to the enum.
+6. How do empty, unknown practitioner and invalid filter cases differ? 
+    A known practitioner with no matching appointments gets an empty list. An unknown practitioner raises LookupError; an invalid status raises ValueError. These are different cases: no results is valid, while the latter two are errors.
+7. Which console errors recover, and how is unchanged state checked? 
+    The console reports and recovers from expected ValueError and LookupError exceptions, such as invalid fields, unknown records, malformed dates, or booking conflicts; an invalid menu choice also returns to the menu. To check a rejected operation leaves state unchanged, capture the stored records and relevant fields before it, then compare them afterward—including appointment order, status, time, and participants—and confirm a later valid operation still works.
+8. What is data integrity for registered participants, conflicts and history? 
+    Booking must use the registered Patient and Practitioner objects, not merely new objects with matching IDs. A practitioner conflict is another scheduled appointment for that same practitioner at the same time; a different practitioner does not conflict. Cancellation changes status but retains the appointment, so it remains retrievable and listable, and its slot can be booked again.
+9. What is Copilot's review role, and who verifies findings? 
+    Copilot can suggest risks or review code against the stated requirements, but its output is not proof of correctness. A human checks each finding against the implementation and tests, then accepts, modifies, or rejects it and records the reason and verification. Don’t claim a review or verification happened unless it did.
+10. How do pure functions and OOP responsibilities work together? 
+    Pure functions handle collection filtering and ordering without hidden state, I/O, or mutation. OOP objects enforce domain rules and own their state; the store owns session collections, services coordinate workflows, and the console handles user input and output. These responsibilities complement one another rather than compete.
+
+
 
 ## H. Review, completion and common handover
 

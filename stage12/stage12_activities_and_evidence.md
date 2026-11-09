@@ -21,7 +21,7 @@ Feature freeze / owner / verifier: [response]
 
 ## B Requirements and release readiness matrix
 
-Tutorial activity 1: All tests pass, README setup is incomplete, one dependency is unreviewed and a known limitation is undocumented. Decide Release / Release with conditions / Do not release and justify: [response]
+Tutorial activity 1: All tests pass, README setup is incomplete, one dependency is unreviewed and a known limitation is undocumented. Decide Release / Release with conditions / Do not release and justify: [Release with conditions. Because of the tests passing the program has been shown to be functional. Prior to release, the README setup needs to be completed to ensure users can install the program. The dependency should also be reviewed to check for potential issues that could arise from the dependency. The limitation in the program should be documents in the README so users are aware of the limitation. Once these three conditions have been met, the program should be ready for release.]
 
 Tutorial activity 2 and actual readiness matrix. Add exact requirement/acceptance IDs, evidence and reviewer; distinguish common/PG applicability.
 
@@ -202,25 +202,25 @@ Remaining administration or release dependency: [response]
 
 ## M Formative questions
 
-1. What is a release candidate? [response]
+1. What is a release candidate? [A release candidate is a version of the program that contains all features in a stable state that could be release as the final version. A release candidate can not turn into the full release version if any major bugs come up while testsing.]
 
-2. What is feature freeze and why is it used? [response]
+2. What is feature freeze and why is it used? [A feature freeze is the point in the product development lifecycle where major changes or additional features are reduced or even stopped. A feature freeze is used to help reach a release stage through reducing major changes made.]
 
-3. What is regression testing in a release context? [response]
+3. What is regression testing in a release context? [Regression testing is a form of testing to make sure that new additions to the source code do not iinadvertently break any other features in the program. It ensures that any changes made to the source code does not break the program.]
 
-4. What is a known limitation? [response]
+4. What is a known limitation? [A known limitation is a flaw, missing feature or constraint that is known by the developers that is yet to be implemented in the current version.]
 
-5. What is technical debt? [response]
+5. What is technical debt? [Technical debt describes the cost of maintaining software. This is usually brought up when deciding if an issue should be solved with an easy to implement solution that could cause problems later on or solving the issue with a solution that takes more time to develop but ensures fewer problems in the future.]
 
-6. What are release notes? [response]
+6. What are release notes? [Release notes are a document released along side a program release or update. Release notes explain what features the program has and the purpose of the program. When release notes are released with an update, the release notes will explain what has been changed from the prior version.]
 
-7. What is software maintenance? [response]
+7. What is software maintenance? [Software maintenance is the practice of updating, modifying and optimising code after it has been released. This practice is used to improve the program performance and fix any bugs not found or fixed prior to release.]
 
-8. What is the purpose of the individual demonstration/viva? [response]
+8. What is the purpose of the individual demonstration/viva? [The purpose of the individual demonstration/viva is to showcase individual understanding and contribution on the project.]
 
-9. What should the final responsible-AI check establish before release? [response]
+9. What should the final responsible-AI check establish before release? [The final responsible-AI check before release should establish that AI-generated decisions should be communicated, function as intended and code generated is safe for release.]
 
-10. What is the main course conclusion about AI and the role of the software engineer? [response]
+10. What is the main course conclusion about AI and the role of the software engineer? [The main course conclusion about AI and the role of the software engineer is that AI can be used an effective tool when used properly and guided by a software engineer in the production of code for a program. AI does not fully replace the role of a software engineer as there still needs to be a code review conducted prior to AI written code being approved.]
 
 
 ## N Reflection viva and handover

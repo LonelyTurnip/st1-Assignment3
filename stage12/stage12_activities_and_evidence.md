@@ -27,16 +27,16 @@ Tutorial activity 2 and actual readiness matrix. Add exact requirement/acceptanc
 
 | Release claim / requirement / scope | Evidence | Location/link and SHA | Reviewer | Sufficient? | Gap/action |
 |---|---|---|---|---|---|
-| Cancellation history works | [response] | [response] | [response] | [response] | [response] |
-| Architecture responsibilities are appropriate | [response] | [response] | [response] | [response] | [response] |
+| Cancellation history works | [User can view cancellation history] | [response] | [response] | [response] | [response] |
+| Architecture responsibilities are appropriate | [Each function is responsbile for one thing and does not negatively impact any other function] | [response] | [response] | [response] | [response] |
 | Rescheduling is safe — PG only | [response] | [response] | [response] | [response] | [response] |
 | AI use is responsible — common recheck / PG assurance | [response] | [response] | [response] | [response] | [response] |
-| System is maintainable | [response] | [response] | [response] | [response] | [response] |
-| FR-01–03 register/find and validation | [response] | [response] | [response] | [response] | [response] |
-| FR-04–05 booking/conflict rules | [response] | [response] | [response] | [response] | [response] |
-| FR-06–08 cancellation/history/find | [response] | [response] | [response] | [response] | [response] |
+| System is maintainable | [System can be scaled and each function is easily identifiable in case of debugging.] | [response] | [response] | [response] | [response] |
+| FR-01–03 register/find and validation | [FR1 and FR2 are both functional with verifiable test results] | [response] | [response] | [response] | [response] |
+| FR-04–05 booking/conflict rules | [FR4 and FR5 are both functional with verifiable test results] | [response] | [response] | [response] | [response] |
+| FR-06–08 cancellation/history/find | [FR6 and FR8 are both functional with verifiable test results] | [response] | [response] | [response] | [response] |
 | FR-09 and QRY/FP listing/filter/order/purity | [response] | [response] | [response] | [response] | [response] |
-| UI full console sequence and error recovery | [response] | [response] | [response] | [response] | [response] |
+| UI full console sequence and error recovery | [Console UI is implemented and all functions are connect properly with verifiable tests proving each console option works.] | [response] | [response] | [response] | [response] |
 | Session-only scope / FR-10 retired | [response] | [response] | [response] | [response] | [response] |
 | PG RES and assurance integration | [response] | [response] | [response] | [response] | [response] |
 
@@ -58,13 +58,13 @@ Remaining failure / limitation: [response]
 | Demo step | Synthetic setup/input | Expected requirement | Observed result | Evidence/link |
 |---|---|---|---|---|
 | Problem and stakeholders | [response] | [response] | [response] | [response] |
-| Register and find Patient and two Practitioners | [response] | [response] | [response] | [response] |
-| Valid booking | [response] | [response] | [response] | [response] |
-| Same practitioner exact-time conflict rejected | [response] | [response] | [response] | [response] |
-| Different practitioner same time allowed | [response] | [response] | [response] | [response] |
-| Cancel SCHEDULED and retain/find CANCELLED object | [response] | [response] | [response] | [response] |
-| Invalid/repeated cancellation rejected | [response] | [response] | [response] | [response] |
-| Default all-status listing | [response] | [response] | [response] | [response] |
+| Register and find Patient and two Practitioners | [Register a Patient and Register 2 practitioners. Run find patient and find practitioner. Input: 1, P1, John Smith, 3, D1, Greg Stevens, General Practitioner, 3, D2, Dan Wilson, General Practitioner, 2, P1, 4, D1, 4, D2] | [The program will register the patient and practitioners and return their information when called.] | [Program succesfully registers the patient and practitioners and returns their information when called.] | [response] |
+| Valid booking | [Register a patient and practitioner and use information to book an appointment. Input: 1, P1, John Smith, 3, D1, Greg Stevens, General Practitioner, 5, A1, P1, D1, 2026-10-10 10:00] | [Program will succesfully book an appointment.] | [Program succesfully books an appointment for patient 1 with practitioner 1] | [response] |
+| Same practitioner exact-time conflict rejected | [Try to book a second appointment using the same practitioner at the same time as a previously booked appointment] | [Input: 1, P1, John Smith, 3, D1, Greg Stevens, General Practitioner, 5, A1, P1, D1, 2026-10-10 10:00, 5, A2, P1, D1, 2026-10-10 10:00] | [Program returned Error: Practitioner already has a scheduled appointment at this time. Program continues to run] | [response] |
+| Different practitioner same time allowed | [Try to book an appointment with a different practitioner at the same time as an appointment booked with first practitioner. Input: 1, P1, John Smith, 3, D1, Greg Stevens, General Practitioner, 3, D2, Dan Wilson, General Practitioner, 2, P1, 4, D1, 4, D2, 5, A1, P1, D1, 2026-10-10 10:00, 5, A2, P1, D2, 2026-10-10 10:00] | [Appointment will be succesfully booked] | [Program succesfully books appointment at same time as previous appointment booking but with different practitioner] | [response] |
+| Cancel SCHEDULED and retain/find CANCELLED object | [Cancel a scheduled appointment and then find the cancelled appointment. Input: 1, P1, John Smith, 3, D1, Greg Stevens, General Practitioner, 3, D2, Dan Wilson, General Practitioner, 2, P1, 4, D1, 4, D2, 5, A1, P1, D1, 2026-10-10 10:00, 5, A2, P1, D2, 2026-10-10 10:00, 6, A1, 7, A1] | [The appointment will succesfully be cancelled and when find appointment is called it will still return a value.] | [Program succesfully cancels a scheduled appointment and then retains that information to return the appointment when called in find appointment.] | [response] |
+| Invalid/repeated cancellation rejected | [Cancel an appointment that has already been cancelled. Input:1, P1, John Smith, 3, D1, Greg Stevens, General Practitioner, 3, D2, Dan Wilson, General Practitioner, 2, P1, 4, D1, 4, D2, 5, A1, P1, D1, 2026-10-10 10:00, 5, A2, P1, D2, 2026-10-10 10:00, 6, A1, 6, A1] | [Program will return a message saying that cancelled appointments cannot be cancelled.] | [Program returns Error message: Only SCHEDULED appointments may be cancelled.] | [response] |
+| Default all-status listing | [A practitioner will be given multiple appointments and then then list practitioner appointments will be called. Input: Input:1, P1, John Smith, 3, D1, Greg Stevens, General Practitioner, 3, D2, Dan Wilson, General Practitioner, 2, P1, 4, D1, 4, D2, 5, A1, P1, D1, 2026-10-10 10:00, 5, A2, P1, D1, 2026-10-14 10:00, 5, A3, P1, D1, 2026-10-18 10:00] | [When find practitioner appointments is called a list of all appointments for that practitioner will be returned] | [A list of all appointments registered to that practitioner were returned.] | [response] |
 | Explicit filtering / empty vs unknown / deterministic order | [response] | [response] | [response] | [response] |
 | Invalid date/status/menu/lookup recovery and continued operation | [response] | [response] | [response] | [response] |
 | Session-only limitation and normal exit | [response] | [response] | [response] | [response] |
@@ -232,7 +232,7 @@ Start doing — engineering and AI use: [response]
 Stop doing — engineering and AI use: [response]
 Continue doing — engineering and AI use: [response]
 What worked / caused rework / future delivery improvement: [response]
-One paragraph — If AI can write code why do we still need software engineers: [response]
+One paragraph — If AI can write code why do we still need software engineers: [Even though AI can write code, software engineers are still required in the production of software. This is because there are certain tasks that AI cannot effectively complete without assitance from software engineers. Software engineers are still required to create guidelines and prompts to help guide the AI to succesfully create propper code. Software engineers are also still needed to ensure the quality of code meets the standard required and also that the program has no major flaws or security risks. Software engineers still need the ability to read code and understand the logic behind algorithms so they can modify code provided by AI.]
 
 | Preparation item | Own explanation and evidence link |
 |---|---|

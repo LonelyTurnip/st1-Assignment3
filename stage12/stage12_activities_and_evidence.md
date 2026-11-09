@@ -2,17 +2,20 @@
 
 BLANK student response template. Supplied from the beginning in stage12/ in your EXISTING repository; complete it only when you reach Stage 12 after the previous applicable stage is integrated, verified and recorded; preserve project/, tests, earlier records and Git history. UG/common and PG/extended scope must be explicit. Use concise results and versioned links, not copied logs or source. No staff answers or fabricated approvals.
 
-Group/tutorial: [response]
-Members and UG/PG applicability: [response]
+Group/tutorial: Mon 2:30 - 4:30 Group 4
+Members and UG/PG applicability: 
+    Aidan - LonelyTurnip - UG
+    Alexandria - xereinera - UG
+    Archie - Arch2ey - UG
 
 
 ## A Release scope and starting SHA
 
-Release label/version and requirements baseline: [response]
-Common starting SHA / branch / applicable members: [response]
-PG starting SHA / branch / applicable members or not applicable: [response]
+Release label/version and requirements baseline: SmartCare A3 Requirements Baseline 2026, revision 2S
+Common starting SHA / branch / applicable members: 528589eb133a550eee1f1a4533cdb44c492baa62 / origin/stage12 / all members (UG)
+PG starting SHA / branch / applicable members or not applicable: Not applicable. UG-only group, Stages 10 and 11 not undertaken
 Working-state review and approved integration: [response]
-Protected common candidate and PG differences: [response]
+Protected common candidate and PG differences: The common candidate is the only candidate; there are no PG differences
 Feature freeze / owner / verifier: [response]
 
 
@@ -165,7 +168,7 @@ Common decision / PG decision where different: [response]
 ## K Final tested release SHA
 
 Exact common tested SHA: [response]
-Exact PG tested SHA or not applicable: [response]
+Exact PG tested SHA or not applicable: Not Applicable
 Final submitted SHA / repository URL: [response]
 Evidence-only later commit and difference explanation: [response]
 Executable changes after testing and re-verification: [response]
@@ -247,8 +250,8 @@ One paragraph — If AI can write code why do we still need software engineers: 
 | Unresolved limitation / future production work | [response] |
 | Personal implementation contribution | [response] |
 | Personal test/review/design/integration contribution | [response] |
-| PG agentic change and rescheduling verification | [response] |
-| PG responsible-AI risk/remediation or supported no finding | [response] |
+| PG agentic change and rescheduling verification | Not Applicable |
+| PG responsible-AI risk/remediation or supported no finding | Not Applicable |
 
 Optional bounded-change practice only: validation rule, focused test, safe error-message change, explicit-input query or agreed status rule with test. Explain expected impact before editing, make a small change, run the test, and identify evidence to inspect if unsure. No live AI unless explicitly permitted. Preserve the submitted candidate.
 

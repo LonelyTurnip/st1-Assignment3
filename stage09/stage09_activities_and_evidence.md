@@ -2,8 +2,11 @@
 
 Common UG and PG record. All Assignment 3 stage materials are provided from the beginning. Complete this stage only after the previous applicable stage has been integrated, verified and recorded. Use this supplied record in stage09/ in your EXISTING repository. Preserve project/, all earlier tests, records and responses. Do not download another starter or copy staff solutions. Use the Stage 9 handout and Overview/revision 2 baseline. Keep responses concise and link accessible artefacts; do not paste entire logs or private peer ratings.
 
-Group: <!-- complete -->
-Members and responsibilities: <!-- complete -->
+Group: Mon 2:30 - 4:30 Group 4 
+Members and responsibilities: 
+    Aidan - LonelyTurnip - UG
+    Alexandria - xereinera - UG
+    Archie - Arch2ey - UG
 Stage 8 integrated SHA, command, working directory and actual result: <!-- complete -->
 
 ## A. Tutorial activities

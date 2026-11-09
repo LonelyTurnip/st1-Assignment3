@@ -17,11 +17,11 @@ Use concise results and accessible artefact links rather than copying entire log
 
 ### A.1 Classify all five statements
 For each, choose symptom, evidence or hypothesis/opinion, and explain your reason. These are discussion statements, not confirmed diagnoses.
-- Appointment disappears after cancellation.
-- The data-store removal path is probably being called.
-- The failing test shows store.find_appointment('A1') returns None.
-- The service layer is badly designed.
-- Traceback points to smartcare/services.py line 42 in the example.
+- Appointment disappears after cancellation. - Symptom
+- The data-store removal path is probably being called. - Hypothesis / Opinion
+- The failing test shows store.find_appointment('A1') returns None. - Evidence
+- The service layer is badly designed. - Hypothesis / Opinion
+- Traceback points to smartcare/services.py line 42 in the example. - Evidence
 The example line number is illustrative; inspect the actual line in your run. The removal hypothesis must be tested against the current project, which has no public delete operation.
 
 Response and reason:
@@ -43,6 +43,16 @@ Response and reason:
   
 - Traceback points to smartcare/services.py line 42 in the example.
   - This is an observable fact produced by a runtime environment and can guide future investigation. 
+
+Appointment disappears after cancellation is a Symptom. This is because the error is affecting the code.
+
+The data-store removal path is probably being called is a Hyptohesis / Opinion. This is because the statement is making an assumption on what is happening without any proof.
+
+The failing test shows store.find_appointment('A1') returns none is evidence. This is because it shows a potential area that is causing the error. 
+
+The service layer is badly desinged is a hypothesis / opinion. This is because it is what the person thinks about the program and not actual proof for the error. 
+
+Traceback points to smartcare/services.pu line 42 in the example is Evidence. This is because it is indicating what the error could be caused by. 
 
 ### A.2 Build a debugging record
 Choose the cancelled-history scenario or a same-practitioner/time booking. Before changing code, record expected behaviour, observed behaviour, minimal reproduction, a hypothesis and evidence to inspect. Use a requirement to justify the expectation. Keep the initial hypothesis even if later evidence disproves it.

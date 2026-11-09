@@ -2,11 +2,11 @@
 
 Common UG and PG record. All Assignment 3 stage materials are provided from the beginning. Complete this stage only after the previous applicable stage has been integrated, verified and recorded. Use this supplied record in stage09/ in your EXISTING repository. Preserve project/, all earlier tests, records and responses. Do not download another starter or copy staff solutions. Use the Stage 9 handout and Overview/revision 2 baseline. Keep responses concise and link accessible artefacts; do not paste entire logs or private peer ratings.
 
-Group: <!-- Mon 2:30 - 4:30 Group 4 -->
-Members and responsibilities: <!-- 
+Group: Mon 2:30 - 4:30 Group 4 
+Members and responsibilities: 
     Aidan - LonelyTurnip - UG
-    Alexandria - xereinera - UG 
-    Archie - Arch2ey - UG -->
+    Alexandria - xereinera - UG
+    Archie - Arch2ey - UG
 Stage 8 integrated SHA, command, working directory and actual result: <!-- complete -->
 
 ## A. Tutorial activities
@@ -88,7 +88,8 @@ Verification should confirm:
 
 ## B. Human design and contracts
 
-Complete before GitHub Copilot. Record any interface/integrity decision and its reasoning: <!-- response -->
+Complete before GitHub Copilot. Record any interface/integrity decision and its reasoning: 
+    The query receives the appointment list, practitioner ID, and optional AppointmentStatus explicitly rather than reading a global store. It returns a new sorted list, retaining references to the original appointment objects. The service validates practitioner existence and status before calling the query. Booking must use the actual registered participant objects, and failed operations must not alter stored records.
 
 | Requirement | Input / session data                    | Operation and responsible component | Expected result or error | Test / evidence |
 |---|-----------------------------------------|---|---|---|
@@ -243,39 +244,44 @@ preservation of source collections during filtering;
 verification of cancelled appointment visibility. -->
 
 | AI finding | Code/test evidence | Severity | Accept/Modify/Reject and reason | Change or no change | Actual verification |
-|---|---|-----|---|---|---|
-|Verify query processing does not modify source collections |test_select_appointments_does_not_modify_source() | Medium |Accept. Purity requirement is explicitly stated in Stage 9 requirements. |Added no-mutation verification test. |Test passed |
-|Verify equal-time appointments use appointment ID tie-break ordering |test_select_appointments_sorted_by_time_then_id() | Medium |Accept. Sorting contract requires deterministic ordering. |Added ordering verification test. |Test passed |
-|Add additional abstraction layers for appointment queries |No requirement supports extra layer | Low |Reject. Introduces unnecessary complexity and does not support assessment requirements. |No change |Existing implementation satisfied requirements |
-|Verify invalid status handling in service layer |test_list_practitioner_invalid_status() | Medium |Accept. Service contract requires invalid status rejection. |Added validation test. |Test passed |
-|Verify cancelled appointments remain visible in queries |test_cancelled_appointments_remain_listable() | High |Accept. Directly supports FR-07 retained history requirement. |Added workflow verification. |Test passed |
+|---|---|---|---|---|---|
+| | | | | | |
 
-Responsibility check: explain how domain invariants, shared-store collections, service coordination, pure queries and console effects remain separate: <!-- The implementation maintains clear separation of responsibilities:
-Domain objects (Patient, Practitioner, Appointment) enforce business rules and invariants such as valid identifiers and appointment state transitions.
-SmartCareDataStore manages the shared collections of patients, practitioners, and appointments and provides retrieval operations.
-Services coordinate business operations such as registration, booking, cancellation, lookup, and appointment listing while enforcing validation requirements.
-Pure query functions (appointment_sort_key() and select_appointments()) perform filtering and sorting only, with no mutation, I/O, or hidden state.
-Console functions are responsible for user interaction, input handling, menu navigation, and displaying output. They do not implement business logic or modify stored data directly.
-This separation ensures domain invariants remain protected, collection management remains centralised in the data store, business rules remain in the service layer, query processing remains pure and testable, and user-interface effects remain isolated to the console layer. -->
+Responsibility check: explain how domain invariants, shared-store collections, service coordination, pure queries and console effects remain separate: 
+    Domain objects validate their own data and enforce appointment status transitions. The data store owns the session collections and returns new lists of stored objects. Services coordinate validation, lookups, booking, cancellation, and listing. Pure queries filter and sort without I/O or mutation. The console owns prompts, parsing, and printed output.
 
 ## F. Required reflections
 
-1. Which integration concern was architectural rather than a filtering/sorting detail? <!-- The primary architectural concern was maintaining a clear separation of responsibilities between the domain model, data store, service layer, query layer, and console interface. The challenge was ensuring that filtering and sorting logic remained inside pure query functions, while validation and business rules remained in the service layer and user interaction remained in the console layer. This was an architectural concern because it affected how the application components interacted, rather than how appointments were filtered or sorted. -->
-2. Which Copilot suggestion did you reject as over-engineering, and why? <!-- A suggestion to introduce additional abstraction layers for appointment query processing was rejected as over-engineering. The existing design already separated responsibilities appropriately through the data store, service layer, query functions, and console interface. Adding extra classes or architectural layers would have increased complexity without providing any benefit to the Stage 9 requirements or improving functionality, maintainability, or test coverage. -->
-3. How did you prove cancelled appointments remain retrievable and listable in the same session? <!-- Cancelled appointments were verified through both automated tests and manual workflow testing. The workflow tests confirmed that an appointment could be booked, cancelled, and then successfully retrieved through lookup and practitioner appointment listing functions. The test_cancelled_appointments_remain_listable() test verified that cancelled appointments remained present in the returned appointment list with a status of CANCELLED. Manual menu testing further confirmed that cancelled appointments could still be viewed during the same application session, satisfying the retained-history requirement from FR-07. -->
+1. Which integration concern was architectural rather than a filtering/sorting detail?  
+    Ensuring the services and console use the same session-scoped store, and that appointment history is retained rather than removed on cancellation. That is an integration/data-lifecycle concern, not a sorting detail.  
+2. Which Copilot suggestion did you reject as over-engineering, and why? <!-- response -->
+3. How did you prove cancelled appointments remain retrievable and listable in the same session? 
+    The tests in test_services.py assert that cancellation returns the same appointment, lookup still finds it, and its status is CANCELLED. test_workflows.py asserts a cancelled appointment remains in the default listing. Report these as executed evidence only after running the tests
 
 ## G. Ten formative answers
 
-1. What makes select_appointments pure, and what side effect breaks purity? <!-- select_appointments() is pure because it depends only on its inputs and does not modify state, perform I/O, or alter the supplied collections. Modifying the source list, printing output, or storing information outside the function would introduce side effects and break purity. -->
-2. Which explicit inputs are needed, and why avoid a global store? <!-- select_appointments() requires an appointment list, a practitioner ID, and an optional appointment status filter. Providing these values explicitly makes the function independent of application state and easier to test. Using a global store would create hidden dependencies, reduce reusability, and make testing and debugging more difficult. -->
-3. How can a new list reuse Appointment objects safely? <!-- A query function can create and return a new list that contains references to the existing Appointment objects already stored in memory. This preserves object identity while avoiding unnecessary duplication of domain objects. Because the query does not modify the objects, reusing the references is safe. -->
-4. Why use a named key, and what breaks equal-time ties? <!-- A named key provides a single reusable definition of the ordering logic and avoids repeating sorting code throughout the application. The appointment_sort_key() function sorts appointments by date_time first and uses appointment_id as a tie-breaker when two appointments have the same time. -->
-5. How do default and explicit status filters differ? <!-- A default filter value of None returns appointments of all statuses for the specified practitioner. An explicit filter such as AppointmentStatus.CANCELLED or AppointmentStatus.SCHEDULED restricts the results to appointments matching that status only. -->
-6. How do empty, unknown practitioner and invalid filter cases differ? <!-- Empty result: The practitioner exists, but no appointments match the filter. An empty list is returned. Unknown practitioner: The practitioner ID does not exist in the data store. A LookupError is raised. Invalid filter: The supplied filter is not a valid AppointmentStatus value. A ValueError is raised. -->
-7. Which console errors recover, and how is unchanged state checked? <!-- Recoverable console errors include blank identifiers, duplicate identifiers, unknown records, malformed dates, invalid menu choices, invalid status filters, and repeated cancellation attempts. The application displays an error message and continues running rather than terminating. Unchanged state is verified by performing subsequent lookups or listings and confirming that existing patients, practitioners, and appointments remain unchanged after the failed operation. -->
-8. What is data integrity for registered participants, conflicts and history? <!-- Data integrity means that patient and practitioner identities remain valid and unique, practitioner conflict rules prevent double-booking, appointment data remains consistent, and cancelled appointments continue to exist in appointment history. Invalid operations must not corrupt or alter existing valid records. -->
-9. What is Copilot's review role, and who verifies findings? <!-- GitHub Copilot's role is to provide suggestions, identify potential issues, and assist with code review. Copilot findings should be treated as hypotheses rather than confirmed facts. Human developers are responsible for verifying all suggestions against project requirements, code inspection, runtime behaviour, and test results before accepting them. -->
-10. How do pure functions and OOP responsibilities work together? <!-- Pure functions provide predictable processing such as filtering and sorting without modifying application state or producing side effects. Object-oriented components manage domain behaviour, validation, storage, and business rules. Combining pure functions with OOP responsibilities creates a system that is easier to test, maintain, debug, and extend while preserving clear separation of concerns. -->
+1. What makes select_appointments pure, and what side effect breaks purity? 
+    select_appointments() is pure because it depends only on its inputs and does not modify state, perform I/O, or alter the supplied collections. Modifying the source list, printing output, or storing information outside the function would introduce side effects and break purity.
+2. Which explicit inputs are needed, and why avoid a global store? 
+    The query needs the appointment list, practitioner ID, and optional status: list[Appointment], str, and AppointmentStatus | None. The sort-key function needs one Appointment. Avoiding a global store makes the query’s dependencies explicit, easier to test, and reusable without hidden state.
+3. How can a new list reuse Appointment objects safely? 
+    select_appointments builds and returns a new list, so sorting or filtering it does not reorder the caller’s list. The returned list contains the same Appointment objects, which is safe here because the query reads them without changing them. Callers should remember that those objects are shared references.
+4. Why use a named key, and what breaks equal-time ties?   
+    A named key makes the ordering rule explicit and reusable: appointment_sort_key returns (date_time, appointment_id). Passing it as key=appointment_sort_key lets Python call it for each appointment. The ID breaks ties when two appointments have the same time.
+5. How do default and explicit status filters differ? 
+    With no status (None), the listing includes every status. An explicit AppointmentStatus filters to appointments with that status. In the console, a blank filter means all statuses; a supplied value is converted to the enum.
+6. How do empty, unknown practitioner and invalid filter cases differ? 
+    A known practitioner with no matching appointments gets an empty list. An unknown practitioner raises LookupError; an invalid status raises ValueError. These are different cases: no results is valid, while the latter two are errors.
+7. Which console errors recover, and how is unchanged state checked? 
+    The console reports and recovers from expected ValueError and LookupError exceptions, such as invalid fields, unknown records, malformed dates, or booking conflicts; an invalid menu choice also returns to the menu. To check a rejected operation leaves state unchanged, capture the stored records and relevant fields before it, then compare them afterward—including appointment order, status, time, and participants—and confirm a later valid operation still works.
+8. What is data integrity for registered participants, conflicts and history? 
+    Booking must use the registered Patient and Practitioner objects, not merely new objects with matching IDs. A practitioner conflict is another scheduled appointment for that same practitioner at the same time; a different practitioner does not conflict. Cancellation changes status but retains the appointment, so it remains retrievable and listable, and its slot can be booked again.
+9. What is Copilot's review role, and who verifies findings? 
+    Copilot can suggest risks or review code against the stated requirements, but its output is not proof of correctness. A human checks each finding against the implementation and tests, then accepts, modifies, or rejects it and records the reason and verification. Don’t claim a review or verification happened unless it did.
+10. How do pure functions and OOP responsibilities work together? 
+    Pure functions handle collection filtering and ordering without hidden state, I/O, or mutation. OOP objects enforce domain rules and own their state; the store owns session collections, services coordinate workflows, and the console handles user input and output. These responsibilities complement one another rather than compete.
+
+
 
 ## H. Review, completion and common handover
 

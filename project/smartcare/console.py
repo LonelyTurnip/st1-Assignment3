@@ -6,13 +6,12 @@ from datetime import datetime
 
 from smartcare import data_store
 from smartcare.data_store import SmartCareDataStore
-from smartcare.domain import Appointment
+from smartcare.domain import Appointment, AppointmentStatus
 from smartcare.services import (
     AppointmentService,
     PatientService,
     PractitionerService,
 )
-
 
 def parse_date_time(text: str) -> datetime:
     """Parse YYYY-MM-DD HH:MM; raise ValueError for invalid input."""
@@ -73,115 +72,94 @@ def run_demo() -> None:
 def run_menu() -> None:
     data_store = SmartCareDataStore()
 
-    patients = PatientService(data_store)
-    practitioners = PractitionerService(data_store)
-    appointments = AppointmentService(data_store)
+    Call services, recover from expected input errors, and keep this
+    session's data until exit. main.py reports the incomplete menu
+    without crashing.
+    """
+
+    data_store = SmartCareDataStore()
+    patient_service = PatientService(data_store)
+    appointment_service = AppointmentService(data_store)
+    practitioner_service = PractitionerService(data_store)
 
     while True:
-        print("\nSmartCare Menu")
-        print("1. Register patient")
-        print("2. Find patient")
-        print("3. Register practitioner")
-        print("4. Book appointment")
-        print("5. Cancel appointment")
-        print("6. List practitioner appointments")
-        print("7. Exit")
-        choice = input("Choose option: ").strip()
+        print(f"=" * 60)
+        print(f" " *22, f"SMARTCARE", f" " * 23)
+        print(f" " * 17, f"Interactive Console", " " * 18)
+        print(f"=" * 60)
+        print("Session data is temporary and will be discarded when you exit.")
+        print(" ")
+        print(f"MAIN MENU")
+        print(f"-" * 60)
+        print(f"[1] Register patient")
+        print(f"[2] Find patient")
+        print(f"[3] Register practitioner")
+        print(f"[4] Find practitioner")
+        print(f"[5] Book Appointment")
+        print(f"[6] Cancel appointment")
+        print(f"[7] Find appointment")
+        print(f"[8] List practitioner appointments")
+        print(f"[0] Exit")
 
-    #Register Patient
-        if choice == "1":
-            patient_id = input("Patient ID: ")
-            patient_name = input("Patient Name: ")
+        response = input(str("Select an option:")).strip()
 
-            try:
-                patients.register_patient(
-                    patient_id,
-                    patient_name,
-                )
-                print("Patient registered")
-
-            except (ValueError, LookupError) as error:
-                print(error)
-
-    #Find Patient
-        elif choice == "2":
-            patient_id = input("Patient ID: ")
-
-            try:
-                patient = patients.find_patient(patient_id)
-
-                print(f"ID: {patient.patient_id}")
-                print(f"Name: {patient.name}")
-
-            except (ValueError, LookupError) as error:
-                print(error)
-
-    #Register Practitioner
-        elif choice == "3":
-            practitioner_id = input("Practitioner ID: ")
-            prac_name = input ("Practitioner Name: ")
-            speciality = input ("Practitioner Speciality: ")
-            try:
-                practitioners.register_practitioner(
-                    practitioner_id,
-                    prac_name,
-                    speciality,
-                )
-                print("Practitioner registered")
-            except (ValueError, LookupError) as error:
-                print(error)
-
-    #Book Appointment
-        elif choice == "4":
-            appointment_id = input("Appointment ID: ")
-            patient_id = input("Patient ID: ")
-            practitioner_id = input("Practitioner ID: ")
-            date_text = input("Date (YYYY-MM-DD HH:MM): ")
-
-            try:
-                appointment = appointments.book_appointment(
-                    appointment_id,
-                    patient_id,
-                    practitioner_id,
-                    parse_date_time(date_text),
-                )
-
+        try:
+            if(response == "1"):
+                patient_id = input(str("Patient ID: "))
+                patient_name = input(str("Patient Name: "))
+                patient_service.register_patient(patient_id, patient_name)
+                print(f"Patient has been registered")
+                print(f"Patient ID: {patient_id} \nName: {patient_name}")
+            elif(response == "2"):
+                patient_id = input(str("Patient ID: "))
+                patient = patient_service.find_patient(patient_id)
+                print(f"Patient found. {patient.patient_id}: {patient.name}")
+            elif(response == "3"):
+                practitioner_id = input(str("Practitioner ID: "))
+                practitioner_name = input(str("Practitioner Name: "))
+                practitioner_specialty = input(str("Practitioner Specialty: "))
+                practitioner_service.register_practitioner(practitioner_id, practitioner_name, practitioner_specialty)
+                print(f"Practitioner registered successfully")
+                print(f"Practitioner ID: {practitioner_id} \n Practitioner name: {practitioner_name} \n Specialty: {practitioner_specialty}")
+            elif(response == "4"):
+                practitioner_id = input(str("Practitioner ID: "))
+                practitioner = practitioner_service.find_practitioner(practitioner_id)
+                print(f"Practitioner found. {practitioner.practitioner_id}: {practitioner.name}, {practitioner.specialty}")
+            elif(response == "5"): 
+                appointment_id = input(str("Appointment ID: "))
+                patient_id = input(str("Patient ID:"))
+                practitioner_id = input(str("Practitioner ID: "))
+                date_time_input = input(str("Date/time [YYYY-MM-DD HH:MM]: "))
+                date_time = parse_date_time(date_time_input)
+                appointment = appointment_service.book_appointment(appointment_id, patient_id, practitioner_id, date_time)
+                print(f"Appointment booked successfully.")
                 print(format_appointment(appointment))
-
-            except (ValueError, LookupError) as error:
-                print(error)
-
-    #Cancel Appointment
-        elif choice == "5":
-            appointment_id = input("Appointment ID: ")
-
-            try:
-                appointments.cancel_appointment(appointment_id)
-                print("Appointment cancelled")
-
-            except (ValueError, LookupError) as error:
-                print(f"Error: {error}")
-
-
-    #List Practitioners
-        elif choice == "6":
-            practitioner_id = input("Practitioner ID: ")
-
-            try:
-                results = appointments.list_practitioner_appointments(
-                    practitioner_id
+            elif(response == "6"):
+                appointment_id = input(str("Appointment ID: "))
+                appointment = appointment_service.find_appointment(appointment_id)
+                appointment_service.cancel_appointment(appointment_id)
+                print(f"Appointment cancelled successfully.")
+                print(format_appointment(appointment))
+            elif(response == "7"):
+                appointment_id = input(str("Appointment ID: "))
+                appointment = appointment_service.find_appointment(appointment_id)
+                print(f"Appointment Found.")
+                print(format_appointment(appointment))
+            elif(response == "8"):
+                practitioner_id = input(str("Practitioner ID: "))
+                status_text = input(str("Status filter (blank for all): ")).strip()
+                status = AppointmentStatus(status_text.lower()) if status_text else None
+                results = appointment_service.list_practitioner_appointments(
+                    practitioner_id, status,
                 )
-
+                if not results:
+                    print(f"No appointments found for practitioner {practitioner_id}.")
                 for appointment in results:
                     print(format_appointment(appointment))
-
-            except (ValueError, LookupError) as error:
-                print(f"Error: {error}")
-
-    #Exit
-        elif choice == "7":
-            print("Exit")
-            break
-
-        else:
-            print("Invalid Choice")
+            elif(response == "0"):
+                print("Thank you for using SMARTCARE")
+                break
+            else:
+                print("Invalid Response. Please Try Again")
+        except (ValueError, LookupError) as error:
+            print(f"Error: {error}")
